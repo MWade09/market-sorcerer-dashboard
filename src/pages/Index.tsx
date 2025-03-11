@@ -9,7 +9,7 @@ import ActiveTrades from "@/components/ActiveTrades";
 import ExchangeSelector from "@/components/ExchangeSelector";
 import StrategySelector from "@/components/StrategySelector";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Settings, History, ChevronDown, Book, Cog, LogOut, User } from "lucide-react";
+import { Play, Pause, Settings, History, ChevronDown, Book, Cog, LogOut, User, GraduationCap } from "lucide-react";
 import { useMarketData } from "@/hooks/useMarketData";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs as SettingsTabs, TabsContent as SettingsTabsContent, TabsList as SettingsTabsList, TabsTrigger as SettingsTabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +20,7 @@ import RiskManagement from "@/components/RiskManagement";
 import TradingDisclaimer from "@/components/TradingDisclaimer";
 import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics } from "@/utils/mockData";
 import { useAuth } from "@/context/AuthContext";
+import LearningPath from "@/components/LearningPath";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -40,7 +41,7 @@ const Index = () => {
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center mr-4 text-sm text-muted-foreground">
               <User size={16} className="mr-1" />
-              {user?.name || user?.email}
+              {user?.name || user?.email || 'Guest User'}
             </div>
             
             <Button 
@@ -104,13 +105,17 @@ const Index = () => {
         </div>
         
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid w-full md:w-auto grid-cols-4">
+          <TabsList className="grid w-full md:w-auto grid-cols-5">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="trades">Trades</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
+            <TabsTrigger value="learn">
+              <GraduationCap size={16} className="mr-1" />
+              Learn
+            </TabsTrigger>
             <TabsTrigger value="guide">
               <Book size={16} className="mr-1" />
-              User Guide
+              Guide
             </TabsTrigger>
           </TabsList>
           
@@ -155,6 +160,23 @@ const Index = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+          
+          <TabsContent value="learn" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <GraduationCap size={18} />
+                  Learning Path
+                </CardTitle>
+                <CardDescription>
+                  Step-by-step guide to cryptocurrency trading for beginners
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <LearningPath />
+              </CardContent>
+            </Card>
           </TabsContent>
           
           <TabsContent value="guide" className="mt-6">

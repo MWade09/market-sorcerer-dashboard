@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   ChevronRight, 
@@ -10,7 +11,8 @@ import {
   PauseCircle,
   Settings,
   ArrowRight,
-  AlertTriangle
+  AlertTriangle,
+  Save
 } from 'lucide-react';
 import { TradingStrategy, TradingStrategyType } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -20,6 +22,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/sonner';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface StrategyCardProps {
   strategy: TradingStrategy;
@@ -64,7 +68,7 @@ const StrategyCard: React.FC<StrategyCardProps> = ({
 
   return (
     <div className={cn(
-      "content-panel transition-all duration-200 hover:shadow-medium border",
+      "content-panel transition-all duration-200 hover:shadow-medium border p-4 rounded-md",
       strategy.isActive ? "border-primary/50" : "border-border"
     )}>
       <div className="flex items-center justify-between">
@@ -127,6 +131,144 @@ const StrategyCard: React.FC<StrategyCardProps> = ({
   );
 };
 
+// Create a new component for strategy settings to better separate functionality
+const StrategySettingsForm = ({ 
+  strategy, 
+  onSave, 
+  onCancel 
+}: { 
+  strategy: TradingStrategy; 
+  onSave: (strategy: TradingStrategy) => void;
+  onCancel: () => void;
+}) => {
+  const [editedStrategy, setEditedStrategy] = useState<TradingStrategy>({...strategy});
+
+  const handleInputChange = (field: string, value: any) => {
+    if (field.includes('.')) {
+      // Handle nested fields like 'config.rsiPeriod'
+      const [parent, child] = field.split('.');
+      setEditedStrategy({
+        ...editedStrategy,
+        [parent]: {
+          ...editedStrategy[parent as keyof TradingStrategy] as object,
+          [child]: value
+        }
+      });
+    } else {
+      setEditedStrategy({
+        ...editedStrategy,
+        [field]: value
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-4 py-2">
+      <p className="text-sm font-medium mb-1">{strategy.name}</p>
+      <p className="text-sm text-muted-foreground mb-2">{strategy.description}</p>
+      
+      <div className="space-y-4">
+        {strategy.type === 'momentum' && (
+          <>
+            <div>
+              <label className="text-sm font-medium mb-1 block">RSI Period</label>
+              <Input 
+                type="number" 
+                value={editedStrategy.config.rsiPeriod}
+                onChange={(e) => handleInputChange('config.rsiPeriod', parseInt(e.target.value))}
+                min={1}
+                max={50}
+              />
+              <p className="text-xs text-muted-foreground mt-1">Number of periods used to calculate RSI</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium mb-1 block">Overbought Level</label>
+                <Input 
+                  type="number" 
+                  value={editedStrategy.config.overbought}
+                  onChange={(e) => handleInputChange('config.overbought', parseInt(e.target.value))}
+                  min={50}
+                  max={100}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-1 block">Oversold Level</label>
+                <Input 
+                  type="number" 
+                  value={editedStrategy.config.oversold}
+                  onChange={(e) => handleInputChange('config.oversold', parseInt(e.target.value))}
+                  min={0}
+                  max={50}
+                />
+              </div>
+            </div>
+          </>
+        )}
+        
+        {strategy.type === 'trend_following' && (
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium mb-1 block">Fast MA Period</label>
+                <Input 
+                  type="number" 
+                  value={editedStrategy.config.fastMA}
+                  onChange={(e) => handleInputChange('config.fastMA', parseInt(e.target.value))}
+                  min={1}
+                  max={50}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-1 block">Slow MA Period</label>
+                <Input 
+                  type="number" 
+                  value={editedStrategy.config.slowMA}
+                  onChange={(e) => handleInputChange('config.slowMA', parseInt(e.target.value))}
+                  min={2}
+                  max={200}
+                />
+              </div>
+            </div>
+          </>
+        )}
+        
+        <div>
+          <label className="text-sm font-medium mb-1 block">Timeframe</label>
+          <Select 
+            value={editedStrategy.config.timeframe} 
+            onValueChange={(value) => handleInputChange('config.timeframe', value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select timeframe" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1m">1 minute</SelectItem>
+              <SelectItem value="5m">5 minutes</SelectItem>
+              <SelectItem value="15m">15 minutes</SelectItem>
+              <SelectItem value="1h">1 hour</SelectItem>
+              <SelectItem value="4h">4 hours</SelectItem>
+              <SelectItem value="1d">1 day</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      
+      <Separator className="my-2" />
+      
+      <div className="flex justify-end gap-2">
+        <Button variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button onClick={() => onSave(editedStrategy)}>
+          <Save className="h-4 w-4 mr-2" />
+          Save Settings
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 interface StrategySelectorProps {
   strategies: TradingStrategy[];
 }
@@ -140,6 +282,8 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
   );
   const [selectedStrategy, setSelectedStrategy] = useState<TradingStrategy | null>(null);
   const [tab, setTab] = useState<string>('active');
+  const [isNewStrategyDialogOpen, setIsNewStrategyDialogOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
   const handleActivate = (id: string) => {
     const strategy = inactiveStrategies.find(s => s.id === id);
@@ -171,6 +315,105 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
       setSelectedStrategy(strategy);
     }
   };
+  
+  const handleSaveSettings = (updatedStrategy: TradingStrategy) => {
+    const isActive = updatedStrategy.isActive;
+    
+    if (isActive) {
+      setActiveStrategies(activeStrategies.map(s => 
+        s.id === updatedStrategy.id ? updatedStrategy : s
+      ));
+    } else {
+      setInactiveStrategies(inactiveStrategies.map(s => 
+        s.id === updatedStrategy.id ? updatedStrategy : s
+      ));
+    }
+    
+    setSelectedStrategy(null);
+    toast.success(`Strategy "${updatedStrategy.name}" settings updated`, {
+      description: "The changes will take effect immediately."
+    });
+  };
+  
+  const handleCreateStrategy = (templateName: string) => {
+    setSelectedTemplate(null);
+    setIsNewStrategyDialogOpen(false);
+    
+    // Create a new strategy based on the template
+    const newId = `strategy-${Date.now()}`;
+    let newStrategy: TradingStrategy;
+    
+    switch(templateName) {
+      case 'Momentum RSI':
+        newStrategy = {
+          id: newId,
+          name: 'My RSI Strategy',
+          type: 'momentum',
+          description: 'Uses RSI indicator to identify overbought and oversold conditions',
+          config: {
+            rsiPeriod: 14,
+            overbought: 70,
+            oversold: 30,
+            timeframe: '1h'
+          },
+          isActive: false,
+          riskLevel: 'medium'
+        };
+        break;
+      case 'Moving Average Crossover':
+        newStrategy = {
+          id: newId,
+          name: 'My MA Crossover Strategy',
+          type: 'trend_following',
+          description: 'Identifies trends using moving average crossovers',
+          config: {
+            fastMA: 9,
+            slowMA: 21,
+            timeframe: '4h'
+          },
+          isActive: false,
+          riskLevel: 'low'
+        };
+        break;
+      case 'Bollinger Band':
+        newStrategy = {
+          id: newId,
+          name: 'My Bollinger Band Strategy',
+          type: 'momentum',
+          description: 'Trades reversals at Bollinger Band extremes',
+          config: {
+            period: 20,
+            deviations: 2,
+            timeframe: '1h'
+          },
+          isActive: false,
+          riskLevel: 'medium'
+        };
+        break;
+      case 'DCA':
+      default:
+        newStrategy = {
+          id: newId,
+          name: 'My DCA Strategy',
+          type: 'dca',
+          description: 'Dollar-cost average into an asset at regular intervals',
+          config: {
+            interval: 'weekly',
+            amount: 100,
+            asset: 'BTC/USDT'
+          },
+          isActive: false,
+          riskLevel: 'low'
+        };
+    }
+    
+    setInactiveStrategies([...inactiveStrategies, newStrategy]);
+    setSelectedStrategy(newStrategy);
+    
+    toast.success(`New strategy created`, {
+      description: "Update the settings and activate when ready."
+    });
+  };
 
   return (
     <div className="content-panel">
@@ -180,40 +423,10 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
           <p className="text-sm text-muted-foreground">Manage and monitor your automated trading strategies</p>
         </div>
         
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="h-9">
-              <Plus className="h-4 w-4 mr-2" />
-              New Strategy
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Create New Strategy</DialogTitle>
-            </DialogHeader>
-            <div className="py-4">
-              <p className="text-sm text-muted-foreground mb-4">
-                Choose a strategy template to start with. You'll be able to customize all parameters.
-              </p>
-              <div className="space-y-2">
-                {['Momentum RSI', 'Moving Average Crossover', 'Bollinger Band', 'DCA'].map((strategy) => (
-                  <div key={strategy} className="flex items-center justify-between p-3 hover:bg-accent rounded-md cursor-pointer transition-colors">
-                    <div>
-                      <p className="font-medium">{strategy}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {strategy === 'Momentum RSI' && 'Uses RSI indicator to identify overbought and oversold conditions'}
-                        {strategy === 'Moving Average Crossover' && 'Identifies trends using moving average crossovers'}
-                        {strategy === 'Bollinger Band' && 'Trades reversals at Bollinger Band extremes'}
-                        {strategy === 'DCA' && 'Dollar-cost average into an asset at regular intervals'}
-                      </p>
-                    </div>
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button className="h-9" onClick={() => setIsNewStrategyDialogOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          New Strategy
+        </Button>
       </div>
 
       <Tabs defaultValue="active" className="mb-4" onValueChange={setTab}>
@@ -269,105 +482,53 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
         </div>
       )}
 
+      {/* Strategy settings dialog */}
       <Dialog open={!!selectedStrategy} onOpenChange={(open) => !open && setSelectedStrategy(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Strategy Settings</DialogTitle>
           </DialogHeader>
           {selectedStrategy && (
-            <div className="space-y-4 py-2">
-              <p className="text-sm font-medium mb-1">{selectedStrategy.name}</p>
-              <p className="text-sm text-muted-foreground mb-2">{selectedStrategy.description}</p>
-              
-              <div className="space-y-4">
-                {selectedStrategy.type === 'momentum' && (
-                  <>
-                    <div>
-                      <label className="text-sm font-medium mb-1 block">RSI Period</label>
-                      <input 
-                        type="number" 
-                        className="w-full p-2 border rounded-md"
-                        value={selectedStrategy.config.rsiPeriod}
-                        onChange={() => {}}
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">Number of periods used to calculate RSI</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium mb-1 block">Overbought Level</label>
-                        <input 
-                          type="number" 
-                          className="w-full p-2 border rounded-md"
-                          value={selectedStrategy.config.overbought}
-                          onChange={() => {}}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium mb-1 block">Oversold Level</label>
-                        <input 
-                          type="number" 
-                          className="w-full p-2 border rounded-md"
-                          value={selectedStrategy.config.oversold}
-                          onChange={() => {}}
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-                
-                {selectedStrategy.type === 'trend_following' && (
-                  <>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium mb-1 block">Fast MA Period</label>
-                        <input 
-                          type="number" 
-                          className="w-full p-2 border rounded-md"
-                          value={selectedStrategy.config.fastMA}
-                          onChange={() => {}}
-                        />
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium mb-1 block">Slow MA Period</label>
-                        <input 
-                          type="number" 
-                          className="w-full p-2 border rounded-md"
-                          value={selectedStrategy.config.slowMA}
-                          onChange={() => {}}
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-                
-                <div>
-                  <label className="text-sm font-medium mb-1 block">Timeframe</label>
-                  <select className="w-full p-2 border rounded-md">
-                    <option value="1m">1 minute</option>
-                    <option value="5m">5 minutes</option>
-                    <option value="15m">15 minutes</option>
-                    <option value="1h">1 hour</option>
-                    <option value="4h">4 hours</option>
-                    <option value="1d">1 day</option>
-                  </select>
-                </div>
-              </div>
-              
-              <Separator className="my-2" />
-              
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setSelectedStrategy(null)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => {
-                  setSelectedStrategy(null);
-                  toast.success("Strategy settings updated");
-                }}>
-                  Save Settings
-                </Button>
-              </div>
-            </div>
+            <StrategySettingsForm 
+              strategy={selectedStrategy}
+              onSave={handleSaveSettings}
+              onCancel={() => setSelectedStrategy(null)}
+            />
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* New strategy template dialog */}
+      <Dialog open={isNewStrategyDialogOpen} onOpenChange={setIsNewStrategyDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Create New Strategy</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground mb-4">
+              Choose a strategy template to start with. You'll be able to customize all parameters.
+            </p>
+            <div className="space-y-2">
+              {['Momentum RSI', 'Moving Average Crossover', 'Bollinger Band', 'DCA'].map((strategyName) => (
+                <div 
+                  key={strategyName} 
+                  className="flex items-center justify-between p-3 hover:bg-accent rounded-md cursor-pointer transition-colors"
+                  onClick={() => handleCreateStrategy(strategyName)}
+                >
+                  <div>
+                    <p className="font-medium">{strategyName}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {strategyName === 'Momentum RSI' && 'Uses RSI indicator to identify overbought and oversold conditions'}
+                      {strategyName === 'Moving Average Crossover' && 'Identifies trends using moving average crossovers'}
+                      {strategyName === 'Bollinger Band' && 'Trades reversals at Bollinger Band extremes'}
+                      {strategyName === 'DCA' && 'Dollar-cost average into an asset at regular intervals'}
+                    </p>
+                  </div>
+                  <ArrowRight className="h-4 w-4" />
+                </div>
+              ))}
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
