@@ -1,4 +1,3 @@
-
 import { 
   Cryptocurrency, 
   TradePosition, 
@@ -12,52 +11,64 @@ import {
 // Cryptocurrencies
 export const cryptocurrencies: Cryptocurrency[] = [
   {
+    id: 'btc-usdt',
     symbol: 'BTC/USDT',
     name: 'Bitcoin',
     price: 47892.34,
     change24h: 2.54,
     volume24h: 28765432000,
     marketCap: 924567890000,
+    sparkline: [47500, 47600, 47800, 47750, 47900, 47892.34]
   },
   {
+    id: 'eth-usdt',
     symbol: 'ETH/USDT',
     name: 'Ethereum',
     price: 2489.12,
     change24h: 3.78,
     volume24h: 15678932000,
     marketCap: 295678420000,
+    sparkline: [2450, 2460, 2480, 2470, 2490, 2489.12]
   },
   {
+    id: 'sol-usdt',
     symbol: 'SOL/USDT',
     name: 'Solana',
     price: 102.45,
     change24h: -1.32,
     volume24h: 5678910000,
     marketCap: 43289760000,
+    sparkline: [104, 103.5, 103, 102.8, 102.5, 102.45]
   },
   {
+    id: 'bnb-usdt',
     symbol: 'BNB/USDT',
     name: 'Binance Coin',
     price: 378.91,
     change24h: 0.87,
     volume24h: 2345677000,
     marketCap: 58769230000,
+    sparkline: [376, 377, 378, 378.5, 379, 378.91]
   },
   {
+    id: 'ada-usdt',
     symbol: 'ADA/USDT',
     name: 'Cardano',
     price: 0.59,
     change24h: -2.12,
     volume24h: 1234567000,
     marketCap: 19876540000,
+    sparkline: [0.61, 0.605, 0.6, 0.595, 0.59, 0.59]
   },
   {
+    id: 'xrp-usdt',
     symbol: 'XRP/USDT',
     name: 'Ripple',
     price: 0.57,
     change24h: 4.23,
     volume24h: 3456789000,
     marketCap: 30123450000,
+    sparkline: [0.55, 0.555, 0.56, 0.565, 0.57, 0.57]
   },
 ];
 

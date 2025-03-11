@@ -30,7 +30,6 @@ const TradeControls = () => {
   const [symbol, setSymbol] = useState("BTC/USDT");
   const [isExchangeConnected, setIsExchangeConnected] = useState(false);
   
-  // Check if an exchange is connected
   useEffect(() => {
     const activeExchange = exchangeService.getActiveExchange();
     if (activeExchange) {
@@ -41,10 +40,8 @@ const TradeControls = () => {
     }
   }, []);
   
-  // Simulated price update for development purposes
   useEffect(() => {
     const refreshInterval = setInterval(() => {
-      // Add small random price movements to simulate live data
       setCurrentPrice(prev => prev * (1 + (Math.random() - 0.5) * 0.001));
       setPriceChange(prev => Math.max(-5, Math.min(5, prev + (Math.random() - 0.5) * 0.1)));
     }, 5000);
