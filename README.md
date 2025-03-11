@@ -1,69 +1,123 @@
-# Welcome to your Lovable project
 
-## Project info
+# Market Sorcerer - Automated Cryptocurrency Trading Bot
 
-**URL**: https://lovable.dev/projects/2df1999b-75f5-496a-a9d2-9809d7fea44c
+![Market Sorcerer](public/og-image.png)
 
-## How can I edit this code?
+Market Sorcerer is a powerful, customizable trading bot that helps you automate your cryptocurrency trading strategies. With a user-friendly interface and a variety of pre-built strategies, Market Sorcerer enables both beginners and experienced traders to participate in the crypto markets with confidence.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **Multi-Exchange Support**: Connect to popular exchanges like Binance, Coinbase, and Kraken
+- **Pre-built Trading Strategies**: Choose from momentum, trend-following, mean-reversion, and DCA strategies
+- **Advanced Backtesting**: Test your strategies against historical data before risking real capital
+- **Real-time Market Data**: Monitor live market conditions, signals, and performance metrics
+- **Risk Management**: Implement stop losses, take profits, and position sizing to protect your capital
+- **Paper Trading**: Test your strategies in real-time with simulated money
+- **Performance Analytics**: Track your bot's performance with detailed metrics and charts
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2df1999b-75f5-496a-a9d2-9809d7fea44c) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js (v16 or higher)
+- npm or yarn package manager
+- API keys from your preferred cryptocurrency exchange
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/market-sorcerer.git
+cd market-sorcerer
 ```
 
-**Edit a file directly in GitHub**
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+3. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
 
-**Use GitHub Codespaces**
+4. Open your browser and navigate to `http://localhost:8080`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Usage
 
-## What technologies are used for this project?
+1. **Connect your exchange**:
+   - Navigate to Settings
+   - Select your exchange
+   - Enter your API keys
+   - Enable test mode for paper trading
 
-This project is built with .
+2. **Select a strategy**:
+   - Choose from pre-built strategies or customize your own
+   - Adjust parameters based on your risk tolerance
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+3. **Backtest your strategy**:
+   - Test against historical data
+   - Analyze performance metrics
+   - Refine strategy parameters
 
-## How can I deploy this project?
+4. **Start trading**:
+   - Begin with paper trading to validate your strategy
+   - Monitor performance in real-time
+   - Switch to live trading when confident
 
-Simply open [Lovable](https://lovable.dev/projects/2df1999b-75f5-496a-a9d2-9809d7fea44c) and click on Share -> Publish.
+## Strategy Types
 
-## I want to use a custom domain - is that possible?
+### Momentum Strategies
+Use technical indicators like RSI to identify overbought and oversold conditions in the market.
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+### Trend Following Strategies
+Capture gains by following market trends using moving average crossovers.
+
+### Mean Reversion & Volatility Strategies
+Use Bollinger Bands and other volatility indicators to identify price extremes.
+
+### Dollar Cost Averaging (DCA)
+A passive investment strategy that buys a fixed dollar amount at regular intervals.
+
+## Risk Management
+
+- **Position Sizing**: Limit exposure to 1-2% of your portfolio per trade
+- **Stop Loss**: Protect capital by setting appropriate stop losses
+- **Take Profit**: Secure gains with strategic profit targets
+- **Maximum Open Positions**: Control overall portfolio risk
+
+## Advanced Configuration
+
+Refer to the in-app user guide for detailed instructions on:
+
+- Multi-strategy implementation
+- Market condition filters
+- Custom indicator settings
+- Advanced risk parameters
+
+## Troubleshooting
+
+For common issues and their solutions, check the in-app troubleshooting guide or open an issue on GitHub.
+
+## Contributing
+
+We welcome contributions to Market Sorcerer! Please feel free to submit pull requests or open issues to suggest improvements.
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add some amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Disclaimer
+
+Trading cryptocurrencies involves significant risk and can result in the loss of your invested capital. Do not trade with funds you cannot afford to lose. Market Sorcerer is provided as-is with no guarantees of profitability. Always perform your own due diligence before implementing any automated trading strategy.
+
