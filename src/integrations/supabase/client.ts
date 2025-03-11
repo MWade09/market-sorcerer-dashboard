@@ -9,4 +9,27 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+// Get the current URL to use as redirect URL
+const getRedirectTo = () => {
+  if (typeof window === 'undefined') return undefined;
+  
+  // Use the current host and origin for redirects
+  const currentUrl = window.location.origin;
+  console.log("Setting redirect URL to:", currentUrl);
+  return currentUrl;
+};
+
+export const supabase = createClient<Database>(
+  SUPABASE_URL, 
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+      flowType: 'pkce',
+      redirectTo: getRedirectTo()
+    }
+  }
+);
+

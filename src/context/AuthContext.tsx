@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from "@/components/ui/sonner";
 import {
   Dialog,
@@ -37,10 +37,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const [showSupabaseConfigError, setShowSupabaseConfigError] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const closeSupabaseConfigError = () => {
     setShowSupabaseConfigError(false);
   };
+
+  // Handle auth code in URL on page load
+  useEffect(() => {
+    const handleAuthRedirect = async () => {
+      if (location.hash && location.hash.includes('access_token')) {
+        console.log('Detected auth redirect with hash');
+        setIsLoading(true);
+        
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error processing auth redirect:', error);
+          toast.error('Authentication error', {
+            description: 'There was an error verifying your account.',
+          });
+        } else if (data.session) {
+          console.log('Auth redirect successful, user logged in');
+          toast.success('Account verified!', {
+            description: 'Your account has been verified successfully.',
+          });
+          navigate('/');
+        }
+        
+        setIsLoading(false);
+      }
+    };
+
+    handleAuthRedirect();
+  }, [location, navigate]);
 
   useEffect(() => {
     console.log("AuthProvider mounted");
