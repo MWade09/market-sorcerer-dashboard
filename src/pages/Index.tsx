@@ -9,7 +9,7 @@ import ActiveTrades from "@/components/ActiveTrades";
 import ExchangeSelector from "@/components/ExchangeSelector";
 import StrategySelector from "@/components/StrategySelector";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Settings, History, ChevronDown, Book, Cog } from "lucide-react";
+import { Play, Pause, Settings, History, ChevronDown, Book, Cog, LogOut, User } from "lucide-react";
 import { useMarketData } from "@/hooks/useMarketData";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs as SettingsTabs, TabsContent as SettingsTabsContent, TabsList as SettingsTabsList, TabsTrigger as SettingsTabsTrigger } from "@/components/ui/tabs";
@@ -18,12 +18,14 @@ import TradingHistory from "@/components/TradingHistory";
 import UserGuide from "@/components/UserGuide";
 import RiskManagement from "@/components/RiskManagement";
 import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics } from "@/utils/mockData";
+import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
   const { marketData, loading: isLoading, getChartData } = useMarketData();
   const [selectedTab, setSelectedTab] = useState("dashboard");
   const [settingsTab, setSettingsTab] = useState("exchanges");
+  const { user, logout } = useAuth();
 
   const toggleBotStatus = () => {
     setIsRunning(!isRunning);
@@ -35,6 +37,11 @@ const Index = () => {
         <div className="container flex h-16 items-center justify-between py-4">
           <h1 className="text-2xl font-bold tracking-tight">Market Sorcerer Dashboard</h1>
           <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center mr-4 text-sm text-muted-foreground">
+              <User size={16} className="mr-1" />
+              {user?.name || user?.email}
+            </div>
+            
             <Button 
               onClick={toggleBotStatus}
               variant={isRunning ? "destructive" : "default"}
@@ -43,6 +50,7 @@ const Index = () => {
               {isRunning ? <Pause size={16} /> : <Play size={16} />}
               {isRunning ? "Stop Bot" : "Start Bot"}
             </Button>
+            
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
@@ -81,6 +89,10 @@ const Index = () => {
                 </SettingsTabs>
               </DialogContent>
             </Dialog>
+            
+            <Button variant="ghost" size="icon" onClick={logout} title="Logout">
+              <LogOut size={18} />
+            </Button>
           </div>
         </div>
       </header>
