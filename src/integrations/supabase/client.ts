@@ -27,12 +27,17 @@ export const supabase = createClient<Database>(
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true,
-      flowType: 'pkce',
-      // Place redirectTo in the options.global object instead of directly in auth
-      global: {
-        redirectTo: getRedirectTo()
-      }
+      flowType: 'pkce'
     }
   }
 );
 
+// Set redirect URL for authentication
+if (typeof window !== 'undefined') {
+  supabase.auth.setSession({
+    access_token: '',
+    refresh_token: '',
+  }, {
+    redirectTo: getRedirectTo()
+  });
+}
