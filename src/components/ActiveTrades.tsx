@@ -13,12 +13,13 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
+import { activeTrades } from '@/utils/mockData';
 
 interface ActiveTradesProps {
-  positions: TradePosition[];
+  positions?: TradePosition[];
 }
 
-const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions }) => {
+const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions = activeTrades }) => {
   const [selectedPosition, setSelectedPosition] = React.useState<TradePosition | null>(null);
 
   const formatCurrency = (value: number) => {

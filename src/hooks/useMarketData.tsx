@@ -77,5 +77,12 @@ export const useMarketData = () => {
     toast.success('Market data refreshed');
   };
 
-  return { marketData, loading, error, getChartData, refreshData };
+  return { 
+    marketData, 
+    loading, 
+    error, 
+    getChartData, 
+    refreshData,
+    isLoading: loading  // Add isLoading alias for compatibility
+  };
 };

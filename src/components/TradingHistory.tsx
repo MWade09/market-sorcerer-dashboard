@@ -1,111 +1,101 @@
 
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import React from 'react';
+import { 
+  ArrowDownRight, 
+  ArrowUpRight, 
+  Calendar, 
+  Clock, 
+  Search,
+  Filter,
+  SortAsc,
+  SortDesc
+} from 'lucide-react';
+import { TradeHistory } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { tradeHistory } from '@/utils/mockData';
 
 const TradingHistory = () => {
-  // This would typically come from an API or state
-  const tradeHistory = [
-    {
-      id: 1,
-      pair: "BTC/USDT",
-      type: "buy",
-      entryPrice: 36420.50,
-      exitPrice: 36890.20,
-      amount: 0.05,
-      profit: 23.48,
-      profitPercentage: 1.29,
-      date: "2023-05-15 14:30",
-      strategy: "RSI Momentum"
-    },
-    {
-      id: 2,
-      pair: "ETH/USDT",
-      type: "sell",
-      entryPrice: 2540.80,
-      exitPrice: 2480.30,
-      amount: 0.5,
-      profit: -30.25,
-      profitPercentage: -2.37,
-      date: "2023-05-15 12:45",
-      strategy: "Moving Average"
-    },
-    {
-      id: 3,
-      pair: "BTC/USDT",
-      type: "buy",
-      entryPrice: 35980.40,
-      exitPrice: 36420.50,
-      amount: 0.04,
-      profit: 17.60,
-      profitPercentage: 1.22,
-      date: "2023-05-14 23:15",
-      strategy: "Bollinger Bands"
-    },
-    {
-      id: 4,
-      pair: "SOL/USDT",
-      type: "buy",
-      entryPrice: 102.50,
-      exitPrice: 106.30,
-      amount: 5,
-      profit: 19.00,
-      profitPercentage: 3.71,
-      date: "2023-05-14 18:20",
-      strategy: "RSI Momentum"
-    },
-    {
-      id: 5,
-      pair: "ETH/USDT",
-      type: "buy",
-      entryPrice: 2480.30,
-      exitPrice: 2540.80,
-      amount: 0.4,
-      profit: 24.20,
-      profitPercentage: 2.44,
-      date: "2023-05-14 10:30",
-      strategy: "Moving Average"
-    },
-  ];
-
   return (
-    <div>
-      <Table>
-        <TableCaption>Recent trading activity</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Pair</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Strategy</TableHead>
-            <TableHead className="text-right">Entry</TableHead>
-            <TableHead className="text-right">Exit</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-            <TableHead className="text-right">P/L</TableHead>
-            <TableHead className="text-right">Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {tradeHistory.map((trade) => (
-            <TableRow key={trade.id}>
-              <TableCell className="font-medium">{trade.pair}</TableCell>
-              <TableCell>
-                <Badge variant={trade.type === "buy" ? "default" : "destructive"} className="flex w-16 justify-center items-center gap-1">
-                  {trade.type === "buy" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
-                  {trade.type}
-                </Badge>
-              </TableCell>
-              <TableCell>{trade.strategy}</TableCell>
-              <TableCell className="text-right">${trade.entryPrice.toFixed(2)}</TableCell>
-              <TableCell className="text-right">${trade.exitPrice.toFixed(2)}</TableCell>
-              <TableCell className="text-right">{trade.amount}</TableCell>
-              <TableCell className={`text-right font-medium ${trade.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {trade.profit >= 0 ? '+' : ''}{trade.profit.toFixed(2)} ({trade.profitPercentage.toFixed(2)}%)
-              </TableCell>
-              <TableCell className="text-right">{trade.date}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div className="content-panel">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
+        <div className="relative w-full md:w-64">
+          <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input placeholder="Search trades..." className="pl-8" />
+        </div>
+        
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <Button variant="outline" size="sm" className="h-9">
+            <Filter className="h-4 w-4 mr-2" />
+            Filter
+          </Button>
+          <Button variant="outline" size="sm" className="h-9">
+            <SortAsc className="h-4 w-4 mr-2" />
+            Sort
+          </Button>
+          <Button variant="outline" size="sm" className="h-9">
+            <Calendar className="h-4 w-4 mr-2" />
+            Date
+          </Button>
+        </div>
+      </div>
+      
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border-b">
+              <th className="text-left py-2 px-4 font-medium text-muted-foreground text-sm">Type</th>
+              <th className="text-left py-2 px-4 font-medium text-muted-foreground text-sm">Symbol</th>
+              <th className="text-left py-2 px-4 font-medium text-muted-foreground text-sm">Entry</th>
+              <th className="text-left py-2 px-4 font-medium text-muted-foreground text-sm">Exit</th>
+              <th className="text-right py-2 px-4 font-medium text-muted-foreground text-sm">P/L</th>
+              <th className="text-right py-2 px-4 font-medium text-muted-foreground text-sm">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tradeHistory.map((trade) => (
+              <tr key={trade.id} className="border-b hover:bg-accent/30 transition-colors">
+                <td className="py-3 px-4">
+                  <div className="flex items-center gap-2">
+                    <div className={cn(
+                      "w-6 h-6 rounded-full flex items-center justify-center",
+                      trade.type === 'long' 
+                        ? "bg-green-500/10 text-green-600" 
+                        : "bg-red-500/10 text-red-600"
+                    )}>
+                      {trade.type === 'long' ? (
+                        <ArrowUpRight className="h-3 w-3" />
+                      ) : (
+                        <ArrowDownRight className="h-3 w-3" />
+                      )}
+                    </div>
+                    <span className="capitalize text-sm">{trade.type}</span>
+                  </div>
+                </td>
+                <td className="py-3 px-4 text-sm">{trade.symbol}</td>
+                <td className="py-3 px-4 text-sm">${trade.entryPrice.toLocaleString()}</td>
+                <td className="py-3 px-4 text-sm">${trade.exitPrice.toLocaleString()}</td>
+                <td className="py-3 px-4 text-right">
+                  <div className={cn(
+                    "font-medium",
+                    trade.isProfit ? "text-green-600" : "text-red-600"
+                  )}>
+                    {trade.isProfit ? "+" : ""}{trade.pnl.toFixed(2)} ({trade.pnlPercentage.toFixed(2)}%)
+                  </div>
+                </td>
+                <td className="py-3 px-4 text-right text-sm text-muted-foreground">
+                  <div className="flex items-center justify-end gap-1">
+                    <Calendar className="h-3 w-3" />
+                    {trade.closeTime.toLocaleDateString()}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

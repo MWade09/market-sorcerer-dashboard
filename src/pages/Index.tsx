@@ -13,10 +13,12 @@ import { Play, Pause, Settings, History, ChevronDown } from "lucide-react";
 import { useMarketData } from "@/hooks/useMarketData";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Dashboard from "@/components/Dashboard";
+import TradingHistory from "@/components/TradingHistory";
+import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics } from "@/utils/mockData";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
-  const { marketData, isLoading } = useMarketData();
+  const { marketData, isLoading, getChartData } = useMarketData();
   const [selectedTab, setSelectedTab] = useState("dashboard");
 
   const toggleBotStatus = () => {
@@ -48,8 +50,8 @@ const Index = () => {
                   <h4 className="font-medium leading-none">Bot Configuration</h4>
                   <Separator />
                   <div className="grid gap-2">
-                    <ExchangeSelector />
-                    <StrategySelector />
+                    <ExchangeSelector exchanges={exchangeAccounts} />
+                    <StrategySelector strategies={tradingStrategies} />
                   </div>
                 </div>
               </PopoverContent>
@@ -67,7 +69,11 @@ const Index = () => {
           </TabsList>
           
           <TabsContent value="dashboard" className="mt-6">
-            <Dashboard isRunning={isRunning} marketData={marketData} isLoading={isLoading} />
+            <Dashboard 
+              isRunning={isRunning} 
+              marketData={marketData[0]} 
+              isLoading={isLoading} 
+            />
           </TabsContent>
           
           <TabsContent value="trades" className="mt-6">
@@ -80,7 +86,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ActiveTrades />
+                  <ActiveTrades positions={activeTrades} />
                 </CardContent>
               </Card>
             </div>

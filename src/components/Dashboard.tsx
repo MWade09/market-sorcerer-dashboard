@@ -5,8 +5,11 @@ import PerformanceMetrics from "@/components/PerformanceMetrics";
 import { AlertTriangle, TrendingUp, Activity, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MarketData } from "@/lib/types";
+import { MarketData, PerformanceMetric } from "@/lib/types";
 import TradeControls from "@/components/TradeControls";
+import MarketSignals from "@/components/MarketSignals";
+import RiskManagement from "@/components/RiskManagement";
+import { performanceMetrics, bitcoinChartData } from "@/utils/mockData";
 
 interface DashboardProps {
   isRunning: boolean;
@@ -42,7 +45,7 @@ const Dashboard = ({ isRunning, marketData, isLoading }: DashboardProps) => {
             </div>
           </CardHeader>
           <CardContent>
-            <TradingViewChart />
+            <TradingViewChart symbol="BTC/USDT" data={bitcoinChartData} />
           </CardContent>
         </Card>
 
@@ -64,7 +67,7 @@ const Dashboard = ({ isRunning, marketData, isLoading }: DashboardProps) => {
             <CardDescription>Trading bot statistics</CardDescription>
           </CardHeader>
           <CardContent>
-            <PerformanceMetrics />
+            <PerformanceMetrics metrics={performanceMetrics} />
           </CardContent>
         </Card>
 

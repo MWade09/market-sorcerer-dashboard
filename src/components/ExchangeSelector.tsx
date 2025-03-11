@@ -11,7 +11,7 @@ import {
   Link,
   ExternalLink
 } from 'lucide-react';
-import { ExchangeAccount, Exchange } from '@/lib/types';
+import { ExchangeAccount } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -27,7 +27,7 @@ interface ExchangeSelectorProps {
 
 const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges }) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [selectedExchange, setSelectedExchange] = useState<Exchange | null>(null);
+  const [selectedExchange, setSelectedExchange] = useState<string | null>(null);
   const [configValues, setConfigValues] = useState({
     apiKey: '',
     apiSecret: '',

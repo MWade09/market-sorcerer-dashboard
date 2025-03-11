@@ -65,8 +65,12 @@ const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({ metrics }) => {
                 <ProgressWithIndicator 
                   value={
                     metric.label.includes('Win Rate')
-                      ? parseFloat(metric.value.toString()) 
-                      : parseFloat(metric.value.toString().replace('%', ''))
+                      ? typeof metric.value === 'string' 
+                        ? parseFloat(metric.value.replace('%', ''))
+                        : metric.value
+                      : typeof metric.value === 'string'
+                        ? parseFloat(metric.value.replace('%', ''))
+                        : metric.value
                   } 
                   max={
                     metric.label.includes('Win Rate') ? 100 : 20
