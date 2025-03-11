@@ -9,18 +9,21 @@ import ActiveTrades from "@/components/ActiveTrades";
 import ExchangeSelector from "@/components/ExchangeSelector";
 import StrategySelector from "@/components/StrategySelector";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Settings, History, ChevronDown, Book } from "lucide-react";
+import { Play, Pause, Settings, History, ChevronDown, Book, Cog } from "lucide-react";
 import { useMarketData } from "@/hooks/useMarketData";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs as SettingsTabs, TabsContent as SettingsTabsContent, TabsList as SettingsTabsList, TabsTrigger as SettingsTabsTrigger } from "@/components/ui/tabs";
 import Dashboard from "@/components/Dashboard";
 import TradingHistory from "@/components/TradingHistory";
 import UserGuide from "@/components/UserGuide";
+import RiskManagement from "@/components/RiskManagement";
 import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics } from "@/utils/mockData";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
   const { marketData, loading: isLoading, getChartData } = useMarketData();
   const [selectedTab, setSelectedTab] = useState("dashboard");
+  const [settingsTab, setSettingsTab] = useState("exchanges");
 
   const toggleBotStatus = () => {
     setIsRunning(!isRunning);
@@ -40,23 +43,44 @@ const Index = () => {
               {isRunning ? <Pause size={16} /> : <Play size={16} />}
               {isRunning ? "Stop Bot" : "Start Bot"}
             </Button>
-            <Popover>
-              <PopoverTrigger asChild>
+            <Dialog>
+              <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
-                  Settings <ChevronDown size={16} />
+                  <Settings size={16} />
+                  Settings
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-0" align="end">
-                <div className="grid gap-4 p-4">
-                  <h4 className="font-medium leading-none">Bot Configuration</h4>
-                  <Separator />
-                  <div className="grid gap-2">
-                    <ExchangeSelector exchanges={exchangeAccounts} />
-                    <StrategySelector strategies={tradingStrategies} />
+              </DialogTrigger>
+              <DialogContent className="w-full max-w-3xl p-0 max-h-[90vh] overflow-auto">
+                <DialogHeader className="p-6 pb-2">
+                  <DialogTitle className="flex items-center gap-2 text-xl">
+                    <Cog className="h-5 w-5" />
+                    Bot Configuration
+                  </DialogTitle>
+                </DialogHeader>
+                
+                <SettingsTabs value={settingsTab} onValueChange={setSettingsTab} className="w-full">
+                  <div className="px-6">
+                    <SettingsTabsList className="grid w-full grid-cols-3 mb-6">
+                      <SettingsTabsTrigger value="exchanges">Exchanges</SettingsTabsTrigger>
+                      <SettingsTabsTrigger value="strategies">Strategies</SettingsTabsTrigger>
+                      <SettingsTabsTrigger value="risk">Risk Management</SettingsTabsTrigger>
+                    </SettingsTabsList>
                   </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+                  
+                  <SettingsTabsContent value="exchanges" className="p-6 pt-0">
+                    <ExchangeSelector exchanges={exchangeAccounts} />
+                  </SettingsTabsContent>
+                  
+                  <SettingsTabsContent value="strategies" className="p-6 pt-0">
+                    <StrategySelector strategies={tradingStrategies} />
+                  </SettingsTabsContent>
+                  
+                  <SettingsTabsContent value="risk" className="p-6 pt-0">
+                    <RiskManagement />
+                  </SettingsTabsContent>
+                </SettingsTabs>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </header>
