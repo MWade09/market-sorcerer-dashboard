@@ -8,11 +8,9 @@ import { toast } from "@/components/ui/sonner";
 const supabaseUrl = import.meta.env.VITE_CRYPTOBOT_URL;
 const supabaseAnonKey = import.meta.env.VITE_CRYPTOBOT_ANON_KEY;
 
-// Validate environment variables
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase URL or Anon Key is missing. Please check your Supabase integration in Lovable.');
-  // We'll provide a fallback client that will show proper error messages to users
-}
+// Debug environment variables
+console.log("Supabase URL available:", !!supabaseUrl);
+console.log("Supabase Anon Key available:", !!supabaseAnonKey);
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -63,6 +61,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(userData);
       }
       setIsLoading(false);
+    }).catch(error => {
+      console.error("Error getting session:", error);
+      setIsLoading(false);
+      toast.error("Authentication error", {
+        description: "Error retrieving your session. Please try again.",
+      });
     });
 
     // Listen for auth changes
