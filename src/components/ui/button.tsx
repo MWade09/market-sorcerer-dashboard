@@ -2,6 +2,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
+import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 
@@ -46,9 +47,6 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, showNotification = false, notificationMessage = "Success", notificationDescription = "Operation completed successfully", ...props }, ref) => {
-    // Import toast from the Sonner component to avoid circular dependencies
-    const { toast } = require("@/components/ui/sonner")
-    
     const Comp = asChild ? Slot : "button"
     
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
