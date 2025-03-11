@@ -17,6 +17,7 @@ import Dashboard from "@/components/Dashboard";
 import TradingHistory from "@/components/TradingHistory";
 import UserGuide from "@/components/UserGuide";
 import RiskManagement from "@/components/RiskManagement";
+import TradingDisclaimer from "@/components/TradingDisclaimer";
 import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics } from "@/utils/mockData";
 import { useAuth } from "@/context/AuthContext";
 
@@ -98,6 +99,10 @@ const Index = () => {
       </header>
 
       <main className="container py-6">
+        <div className="mb-6">
+          <TradingDisclaimer />
+        </div>
+        
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
           <TabsList className="grid w-full md:w-auto grid-cols-4">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>

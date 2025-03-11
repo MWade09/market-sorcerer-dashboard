@@ -1,16 +1,20 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowDown, ArrowUp, BellRing, Clock, Zap } from "lucide-react";
+import { ArrowDown, ArrowUp, BellRing, Clock, Zap, RefreshCw, AlertTriangle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { toast } from '@/components/ui/sonner';
+import { tradingService, OrderParams } from "@/services/api/tradingService";
+import { marketDataService } from "@/services/api/marketDataService";
+import { exchangeService } from "@/services/api/exchangeService";
 
 const TradeControls = () => {
   const [tradeMode, setTradeMode] = useState("automated");
@@ -19,6 +23,89 @@ const TradeControls = () => {
   const [interval, setInterval] = useState("5m");
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [strategy, setStrategy] = useState("momentum");
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(36789.45);
+  const [priceChange, setPriceChange] = useState(1.24);
+  const [orderType, setOrderType] = useState("market");
+  const [timeInForce, setTimeInForce] = useState("gtc");
+  const [symbol, setSymbol] = useState("BTC/USDT");
+  const [isExchangeConnected, setIsExchangeConnected] = useState(false);
+  
+  // Check if an exchange is connected
+  useEffect(() => {
+    const activeExchange = exchangeService.getActiveExchange();
+    if (activeExchange) {
+      const credentials = exchangeService.getCredentials(activeExchange);
+      setIsExchangeConnected(!!credentials);
+    } else {
+      setIsExchangeConnected(false);
+    }
+  }, []);
+  
+  // Simulated price update for development purposes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Add small random price movements to simulate live data
+      setCurrentPrice(prev => prev * (1 + (Math.random() - 0.5) * 0.001));
+      setPriceChange(prev => Math.max(-5, Math.min(5, prev + (Math.random() - 0.5) * 0.1)));
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
+  
+  const calculateOrderValue = () => {
+    return amount * currentPrice;
+  };
+  
+  const handlePlaceOrder = async (side: 'buy' | 'sell') => {
+    if (!isExchangeConnected) {
+      toast.error('No exchange connected', {
+        description: 'Please connect and activate an exchange in settings first'
+      });
+      return;
+    }
+    
+    try {
+      setIsLoading(true);
+      
+      const orderParams: OrderParams = {
+        symbol,
+        side,
+        type: orderType as 'market' | 'limit' | 'stop',
+        quantity: amount,
+        price: orderType === 'market' ? undefined : currentPrice,
+        timeInForce: timeInForce === 'gtc' ? 'GTC' : timeInForce === 'ioc' ? 'IOC' : 'FOK'
+      };
+      
+      const order = await tradingService.placeOrder(orderParams);
+      
+      toast.success(`${side.toUpperCase()} order placed successfully`, {
+        description: `${amount} ${symbol} at ${orderType === 'market' ? 'market price' : `$${currentPrice.toFixed(2)}`}`
+      });
+    } catch (error) {
+      console.error('Error placing order:', error);
+      toast.error('Failed to place order', {
+        description: error instanceof Error ? error.message : 'Unknown error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  if (!isExchangeConnected) {
+    return (
+      <Card className="p-6 space-y-4">
+        <div className="flex flex-col items-center justify-center py-6 text-center">
+          <AlertTriangle className="h-12 w-12 text-amber-500 mb-3" />
+          <h3 className="text-lg font-medium mb-2">No Exchange Connected</h3>
+          <p className="text-sm text-muted-foreground max-w-md mb-4">
+            You need to connect to an exchange before you can trade. 
+            Please go to Settings and connect your exchange API credentials.
+          </p>
+        </div>
+      </Card>
+    );
+  }
   
   return (
     <div className="space-y-4">
@@ -94,7 +181,7 @@ const TradeControls = () => {
               />
             </div>
             <div className="text-sm text-muted-foreground mt-1">
-              Approx. value: ${(amount * 36789.45).toFixed(2)}
+              Approx. value: ${calculateOrderValue().toFixed(2)}
             </div>
           </div>
           
@@ -147,9 +234,11 @@ const TradeControls = () => {
         <TabsContent value="manual" className="space-y-6 pt-4">
           <div className="flex justify-between">
             <div>
-              <div className="text-lg font-medium">BTC/USDT</div>
-              <div className="text-2xl font-bold">$36,789.45</div>
-              <div className="text-sm text-green-500">+1.24% (24h)</div>
+              <div className="text-lg font-medium">{symbol}</div>
+              <div className="text-2xl font-bold">${currentPrice.toFixed(2)}</div>
+              <div className={`text-sm ${priceChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                {priceChange >= 0 ? '+' : ''}{priceChange.toFixed(2)}% (24h)
+              </div>
             </div>
             <div className="space-y-2">
               <Label>Amount (BTC)</Label>
@@ -162,17 +251,36 @@ const TradeControls = () => {
                 min={0.001}
               />
               <div className="text-sm text-muted-foreground">
-                ${(amount * 36789.45).toFixed(2)}
+                ${calculateOrderValue().toFixed(2)}
               </div>
             </div>
           </div>
           
           <div className="grid grid-cols-2 gap-4">
-            <Button className="w-full h-16 text-lg bg-green-600 hover:bg-green-700">
-              <ArrowUp className="mr-2 h-5 w-5" /> Buy / Long
+            <Button 
+              className="w-full h-16 text-lg bg-green-600 hover:bg-green-700"
+              onClick={() => handlePlaceOrder('buy')}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
+              ) : (
+                <ArrowUp className="mr-2 h-5 w-5" />
+              )}
+              Buy / Long
             </Button>
-            <Button variant="destructive" className="w-full h-16 text-lg">
-              <ArrowDown className="mr-2 h-5 w-5" /> Sell / Short
+            <Button 
+              variant="destructive" 
+              className="w-full h-16 text-lg"
+              onClick={() => handlePlaceOrder('sell')}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
+              ) : (
+                <ArrowDown className="mr-2 h-5 w-5" />
+              )}
+              Sell / Short
             </Button>
           </div>
           
@@ -198,7 +306,7 @@ const TradeControls = () => {
           </div>
           
           <div className="flex gap-4">
-            <Select defaultValue="market">
+            <Select value={orderType} onValueChange={setOrderType}>
               <SelectTrigger>
                 <SelectValue placeholder="Order Type" />
               </SelectTrigger>
@@ -209,7 +317,7 @@ const TradeControls = () => {
               </SelectContent>
             </Select>
             
-            <Select defaultValue="gtc">
+            <Select value={timeInForce} onValueChange={setTimeInForce}>
               <SelectTrigger>
                 <SelectValue placeholder="Time in Force" />
               </SelectTrigger>
@@ -220,6 +328,19 @@ const TradeControls = () => {
               </SelectContent>
             </Select>
           </div>
+          
+          {orderType !== 'market' && (
+            <div className="space-y-2">
+              <Label htmlFor="limit-price">Limit Price</Label>
+              <Input
+                id="limit-price"
+                type="number"
+                value={currentPrice}
+                onChange={(e) => setCurrentPrice(Number(e.target.value))}
+                step={0.01}
+              />
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>
