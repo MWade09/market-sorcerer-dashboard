@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Tabs, 
@@ -23,7 +24,11 @@ import {
   BarChart2,
   TrendingUp as TrendingUpIcon,
   RefreshCw,
-  DollarSign as DollarSignIcon
+  DollarSign as DollarSignIcon,
+  BookOpen,
+  GraduationCap,
+  LineChart,
+  Activity
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -47,93 +52,336 @@ const UserGuide = () => {
         </AlertDescription>
       </Alert>
 
-      <Tabs defaultValue="getting-started" className="w-full">
-        <TabsList className="grid grid-cols-4 mb-4">
+      <Tabs defaultValue="learn" className="w-full">
+        <TabsList className="grid grid-cols-5 mb-4">
+          <TabsTrigger value="learn">
+            <GraduationCap className="h-4 w-4 mr-1 md:mr-2" />
+            <span className="hidden md:inline">Learning Path</span>
+            <span className="md:hidden">Learn</span>
+          </TabsTrigger>
           <TabsTrigger value="getting-started">Getting Started</TabsTrigger>
           <TabsTrigger value="strategies">Strategies</TabsTrigger>
           <TabsTrigger value="testing">Testing</TabsTrigger>
           <TabsTrigger value="advanced">Advanced</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="getting-started" className="space-y-4">
+        <TabsContent value="learn" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Terminal className="h-5 w-5" />
-                Setting Up Your Bot
+                <GraduationCap className="h-5 w-5" />
+                Trading Fundamentals Learning Path
               </CardTitle>
               <CardDescription>
-                Follow these steps to set up and configure your trading bot
+                Start here if you're new to trading or need guidance on parameter settings
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <h3 className="font-medium text-lg">Step 1: Connect an Exchange</h3>
-              <ol className="list-decimal pl-5 space-y-2">
-                <li>Click on the "Settings" button in the top navigation</li>
-                <li>Select an exchange (Binance, Coinbase, Kraken) to connect</li>
-                <li>Create API keys from your exchange account (with trading permissions but <strong>without</strong> withdrawal permissions)</li>
-                <li>Enter your API Key and Secret</li>
-                <li>Enable test mode to ensure no real trades are executed while testing</li>
-                <li>Click "Connect Exchange" to finalize the connection</li>
-              </ol>
-
-              <Separator className="my-4" />
-
-              <h3 className="font-medium text-lg">Step 2: Select or Create a Strategy</h3>
-              <ol className="list-decimal pl-5 space-y-2">
-                <li>Navigate to the "Trading Strategies" section</li>
-                <li>Choose one of the pre-built strategies or create a new one</li>
-                <li>Configure the strategy parameters according to your preferences</li>
-                <li>Save the strategy settings</li>
-              </ol>
-
-              <Separator className="my-4" />
-
-              <h3 className="font-medium text-lg">Step 3: Start the Bot</h3>
-              <ol className="list-decimal pl-5 space-y-2">
-                <li>Ensure you have an active exchange connection</li>
-                <li>At least one trading strategy is activated</li>
-                <li>Click the "Start Bot" button in the top right corner of the dashboard</li>
-                <li>Monitor the bot's performance in the dashboard</li>
-              </ol>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                Dashboard Overview
-              </CardTitle>
-              <CardDescription>
-                Understanding the main dashboard elements
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-medium">Market Data</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Real-time price charts and market information to track asset performance
-                  </p>
+            <CardContent className="space-y-6">
+              {/* First-time setup section */}
+              <div className="bg-accent/50 rounded-lg p-4 border border-accent">
+                <h3 className="font-medium text-lg flex items-center gap-2 mb-2">
+                  <BookOpen className="h-5 w-5" />
+                  First-Time Setup Walkthrough
+                </h3>
+                <p className="mb-4 text-sm">
+                  Follow this step-by-step guide to get started with paper trading (practice mode with no real money)
+                </p>
+                <ol className="list-decimal pl-5 space-y-3">
+                  <li className="pb-2">
+                    <strong>Connect to paper trading account:</strong>
+                    <ul className="list-disc pl-5 mt-1 text-sm">
+                      <li>Click "Settings" in the top navigation</li>
+                      <li>Select "Exchanges" tab and choose any exchange</li>
+                      <li>Check "Enable Test Mode" to use paper trading</li>
+                      <li>Enter API keys (follow exchange-specific instructions)</li>
+                    </ul>
+                  </li>
+                  <li className="pb-2">
+                    <strong>Start with the simplest strategy:</strong>
+                    <ul className="list-disc pl-5 mt-1 text-sm">
+                      <li>Select "Moving Average Crossover" from the strategies list</li>
+                      <li>Use the recommended default settings</li>
+                      <li>Focus on BTC/USDT or ETH/USDT pairs at first</li>
+                    </ul>
+                  </li>
+                  <li className="pb-2">
+                    <strong>Set conservative risk parameters:</strong>
+                    <ul className="list-disc pl-5 mt-1 text-sm">
+                      <li>Set stop-loss at 2-3% (lower is safer for beginners)</li>
+                      <li>Set take-profit at 5-6% (modest but achievable)</li>
+                      <li>Limit position size to 5-10% of your paper funds</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Run in paper mode for at least 30 days</strong> before considering real trading
+                  </li>
+                </ol>
+              </div>
+              
+              <Separator />
+              
+              {/* Market conditions and parameters section */}
+              <div>
+                <h3 className="font-medium text-lg flex items-center gap-2 mb-3">
+                  <Activity className="h-5 w-5" />
+                  Understanding Market Conditions & Parameters
+                </h3>
+                
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="trending-market">
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-2">
+                        <TrendingUpIcon className="h-4 w-4" />
+                        <span>Trading in Trending Markets</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 pl-4">
+                        <h4 className="font-medium">How to identify:</h4>
+                        <ul className="list-disc pl-5 space-y-1 text-sm">
+                          <li>Price consistently making higher highs and higher lows (uptrend)</li>
+                          <li>Price consistently making lower highs and lower lows (downtrend)</li>
+                          <li>Moving averages aligned in direction (shorter above longer in uptrend)</li>
+                          <li>Higher trading volumes supporting the trend direction</li>
+                        </ul>
+                        
+                        <h4 className="font-medium mt-3">Recommended strategy settings:</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          <div className="border rounded-md p-3">
+                            <h5 className="text-sm font-medium mb-2">Moving Average Strategy</h5>
+                            <ul className="list-disc pl-5 text-sm">
+                              <li><strong>Fast MA:</strong> 20-50 periods</li>
+                              <li><strong>Slow MA:</strong> 100-200 periods</li>
+                              <li><strong>Take profit:</strong> 8-15%</li>
+                              <li><strong>Stop loss:</strong> 5-8%</li>
+                            </ul>
+                          </div>
+                          <div className="border rounded-md p-3">
+                            <h5 className="text-sm font-medium mb-2">Momentum Strategy</h5>
+                            <ul className="list-disc pl-5 text-sm">
+                              <li><strong>RSI period:</strong> 14</li>
+                              <li><strong>RSI threshold:</strong> 40/60 instead of 30/70</li>
+                              <li><strong>Stop loss:</strong> Wider (5-7%)</li>
+                              <li><strong>Position size:</strong> Can be increased</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="ranging-market">
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-2">
+                        <LineChart className="h-4 w-4" />
+                        <span>Trading in Range-Bound Markets</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 pl-4">
+                        <h4 className="font-medium">How to identify:</h4>
+                        <ul className="list-disc pl-5 space-y-1 text-sm">
+                          <li>Price oscillating between clear support and resistance levels</li>
+                          <li>Moving averages trending horizontally</li>
+                          <li>RSI regularly cycling between overbought and oversold</li>
+                          <li>Lower trading volumes compared to trending periods</li>
+                        </ul>
+                        
+                        <h4 className="font-medium mt-3">Recommended strategy settings:</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          <div className="border rounded-md p-3">
+                            <h5 className="text-sm font-medium mb-2">RSI Strategy</h5>
+                            <ul className="list-disc pl-5 text-sm">
+                              <li><strong>RSI period:</strong> 14</li>
+                              <li><strong>Overbought:</strong> 70</li>
+                              <li><strong>Oversold:</strong> 30</li>
+                              <li><strong>Take profit:</strong> Narrower (3-5%)</li>
+                              <li><strong>Stop loss:</strong> Tighter (2-3%)</li>
+                            </ul>
+                          </div>
+                          <div className="border rounded-md p-3">
+                            <h5 className="text-sm font-medium mb-2">Bollinger Bands Strategy</h5>
+                            <ul className="list-disc pl-5 text-sm">
+                              <li><strong>Period:</strong> 20</li>
+                              <li><strong>Standard Deviation:</strong> 2</li>
+                              <li><strong>Take profit:</strong> Set to middle band</li>
+                              <li><strong>Position size:</strong> Smaller (3-5%)</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="volatile-market">
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-2">
+                        <Activity className="h-4 w-4" />
+                        <span>Trading in Highly Volatile Markets</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 pl-4">
+                        <h4 className="font-medium">How to identify:</h4>
+                        <ul className="list-disc pl-5 space-y-1 text-sm">
+                          <li>Large price swings in short time periods</li>
+                          <li>Widening Bollinger Bands</li>
+                          <li>High trading volumes with price spikes</li>
+                          <li>Frequent news events and market uncertainty</li>
+                        </ul>
+                        
+                        <Alert className="my-3">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertTitle>Beginner Warning</AlertTitle>
+                          <AlertDescription>
+                            Consider reducing trading activity or sitting out during extremely volatile markets
+                            until you gain more experience.
+                          </AlertDescription>
+                        </Alert>
+                        
+                        <h4 className="font-medium mt-2">If you must trade, adjust your parameters:</h4>
+                        <ul className="list-disc pl-5 space-y-1 text-sm">
+                          <li><strong>Reduce position size</strong> by 50% or more from your normal amount</li>
+                          <li><strong>Widen stop losses</strong> to avoid being stopped out by volatility</li>
+                          <li><strong>Take profits quicker</strong> when they appear</li>
+                          <li><strong>Avoid using leverage</strong> during these periods</li>
+                        </ul>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+              
+              <Separator />
+              
+              {/* Parameter guide section */}
+              <div>
+                <h3 className="font-medium text-lg flex items-center gap-2 mb-3">
+                  <Wrench className="h-5 w-5" />
+                  Parameter Settings Guide
+                </h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-muted rounded-md p-4">
+                    <h4 className="font-medium mb-2">Stop Loss Settings</h4>
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      <div className="text-center border-r pr-2">
+                        <div className="text-sm font-medium text-red-500">Tight (1-3%)</div>
+                        <div className="text-xs text-muted-foreground">Conservative</div>
+                      </div>
+                      <div className="text-center border-r pr-2">
+                        <div className="text-sm font-medium text-amber-500">Medium (3-7%)</div>
+                        <div className="text-xs text-muted-foreground">Balanced</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-blue-500">Wide (7-15%)</div>
+                        <div className="text-xs text-muted-foreground">Aggressive</div>
+                      </div>
+                    </div>
+                    <p className="text-sm mb-2">
+                      <strong>When to use tight stops (1-3%):</strong>
+                    </p>
+                    <ul className="list-disc pl-5 text-xs space-y-1 mb-2">
+                      <li>Trading in stable, range-bound markets</li>
+                      <li>When you have high confidence in entry points</li>
+                      <li>When protecting profits on winning trades</li>
+                      <li>For beginners wanting to minimize losses</li>
+                    </ul>
+                    <p className="text-sm mb-2">
+                      <strong>When to use wider stops (7-15%):</strong>
+                    </p>
+                    <ul className="list-disc pl-5 text-xs space-y-1">
+                      <li>During higher volatility periods</li>
+                      <li>When trading longer timeframes</li>
+                      <li>For trend-following strategies in strong trends</li>
+                      <li>When trading less liquid markets</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-muted rounded-md p-4">
+                    <h4 className="font-medium mb-2">Position Size Settings</h4>
+                    <p className="text-sm mb-3">
+                      Proper position sizing is one of the most important skills in trading:
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h5 className="text-sm font-medium mb-1">For Beginners (1-5% per trade)</h5>
+                        <ul className="list-disc pl-5 text-xs space-y-1">
+                          <li>Minimizes impact of early mistakes</li>
+                          <li>Allows time to learn without large drawdowns</li>
+                          <li>Recommended for first 3-6 months</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h5 className="text-sm font-medium mb-1">For Intermediate (5-10% per trade)</h5>
+                        <ul className="list-disc pl-5 text-xs space-y-1">
+                          <li>Balance between risk and potential returns</li>
+                          <li>Suitable after establishing consistent results</li>
+                          <li>Consider reducing during uncertain markets</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="mt-3">
+                      <h5 className="text-sm font-medium mb-1">Adjusting for Market Conditions:</h5>
+                      <ul className="list-disc pl-5 text-xs space-y-1">
+                        <li><strong>Trending Market:</strong> Can increase position size slightly if trend is clear</li>
+                        <li><strong>Ranging Market:</strong> Standard position sizing works well</li>
+                        <li><strong>Volatile Market:</strong> Reduce position size by 50% or more</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-medium">Performance Metrics</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Key statistics showing your bot's trading performance
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Market Signals</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Technical indicators that help inform trading decisions
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Active Trades</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Current open positions and their performance
-                  </p>
+              </div>
+              
+              <Separator />
+              
+              {/* Real examples section */}
+              <div>
+                <h3 className="font-medium text-lg flex items-center gap-2 mb-3">
+                  <Play className="h-5 w-5" />
+                  Learning Through Examples
+                </h3>
+                
+                <div className="space-y-4">
+                  <div className="border rounded-md p-4">
+                    <h4 className="font-medium mb-2">Example 1: Bitcoin Bull Run</h4>
+                    <p className="text-sm mb-2">
+                      <strong>Market condition:</strong> Strong upward trend with higher highs and higher lows
+                    </p>
+                    <div className="text-sm mb-3">
+                      <strong className="block mb-1">Optimal Parameter Settings:</strong>
+                      <ul className="list-disc pl-5 text-xs space-y-1">
+                        <li><strong>Strategy:</strong> Trend following (Moving Average Crossover)</li>
+                        <li><strong>Fast MA / Slow MA:</strong> 20/100</li>
+                        <li><strong>Stop Loss:</strong> 8% (wider to avoid getting stopped out during normal pullbacks)</li>
+                        <li><strong>Take Profit:</strong> 15% or trailing stop</li>
+                        <li><strong>Position Size:</strong> 7-10% of capital (can be more aggressive in clear trend)</li>
+                      </ul>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      During strong trends, the bot will catch major moves while wider stops prevent being shaken out during normal retracements.
+                    </p>
+                  </div>
+                  
+                  <div className="border rounded-md p-4">
+                    <h4 className="font-medium mb-2">Example 2: Range-Bound Ethereum</h4>
+                    <p className="text-sm mb-2">
+                      <strong>Market condition:</strong> ETH trading between $1,800-$2,200 for several weeks
+                    </p>
+                    <div className="text-sm mb-3">
+                      <strong className="block mb-1">Optimal Parameter Settings:</strong>
+                      <ul className="list-disc pl-5 text-xs space-y-1">
+                        <li><strong>Strategy:</strong> RSI or Bollinger Band mean reversion</li>
+                        <li><strong>RSI Settings:</strong> 14 period, Buy below 30, Sell above 70</li>
+                        <li><strong>Stop Loss:</strong> 3% (tighter as price shouldn't move far from range)</li>
+                        <li><strong>Take Profit:</strong> 5% (or near resistance levels)</li>
+                        <li><strong>Position Size:</strong> 5% of capital (moderate approach)</li>
+                      </ul>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Range-bound markets are ideal for mean-reversion strategies that buy near support and sell near resistance.
+                    </p>
+                  </div>
                 </div>
               </div>
             </CardContent>
