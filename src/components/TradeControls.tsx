@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
@@ -44,13 +43,13 @@ const TradeControls = () => {
   
   // Simulated price update for development purposes
   useEffect(() => {
-    const interval = setInterval(() => {
+    const refreshInterval = setInterval(() => {
       // Add small random price movements to simulate live data
       setCurrentPrice(prev => prev * (1 + (Math.random() - 0.5) * 0.001));
       setPriceChange(prev => Math.max(-5, Math.min(5, prev + (Math.random() - 0.5) * 0.1)));
     }, 5000);
     
-    return () => clearInterval(interval);
+    return () => clearInterval(refreshInterval);
   }, []);
   
   const calculateOrderValue = () => {

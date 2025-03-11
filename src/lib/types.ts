@@ -1,4 +1,3 @@
-
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -19,12 +18,14 @@ export interface MarketData {
 }
 
 export interface Cryptocurrency {
+  id: string;
   symbol: string;
   name: string;
   price: number;
   change24h: number;
   volume24h: number;
   marketCap: number;
+  sparkline?: number[];
 }
 
 export interface ChartData {
@@ -111,6 +112,7 @@ export interface ExchangeAccount {
   balance: number;
   isActive: boolean;
   logo: string;
+  isLoading?: boolean;
 }
 
 export interface PerformanceMetric {

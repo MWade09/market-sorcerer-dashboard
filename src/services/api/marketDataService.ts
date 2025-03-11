@@ -1,3 +1,4 @@
+
 import { Cryptocurrency, ChartData, TimeFrame } from '@/lib/types';
 import { toast } from '@/components/ui/sonner';
 import { exchangeService, SupportedExchange } from './exchangeService';
@@ -187,9 +188,16 @@ class MarketDataService {
       // Apply trend to price with some randomness
       currentPrice = currentPrice * (1 + trend + (Math.random() - 0.5) * 0.01);
       
+      // Create a full ChartData object that includes all required properties
+      const price = currentPrice;
       return {
-        time: new Date(now - (points - i) * interval).toISOString(),
-        value: currentPrice
+        time: now - (points - i) * interval,
+        open: price * (1 - Math.random() * 0.005),
+        high: price * (1 + Math.random() * 0.01),
+        low: price * (1 - Math.random() * 0.01),
+        close: price,
+        volume: Math.random() * 1000000,
+        value: price // Keep the value property for compatibility
       };
     });
   }
