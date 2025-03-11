@@ -1,4 +1,3 @@
-
 import { toast } from "@/components/ui/sonner";
 
 export interface ExchangeCredentials {
@@ -26,6 +25,11 @@ class ExchangeService {
       const updatedExchanges = [...configuredExchanges, exchange];
       localStorage.setItem('configuredExchanges', JSON.stringify(updatedExchanges));
     }
+    
+    // Show success notification
+    toast.success(`${exchange} credentials updated`, {
+      description: `Your API connection to ${exchange} has been configured successfully`
+    });
   }
 
   getCredentials(exchange: SupportedExchange): ExchangeCredentials | undefined {
@@ -43,6 +47,11 @@ class ExchangeService {
     }
     this.activeExchange = exchange;
     localStorage.setItem('activeExchange', exchange);
+    
+    // Show success notification
+    toast.success(`${exchange} activated`, {
+      description: `${exchange} is now your active trading exchange`
+    });
   }
 
   getActiveExchange(): SupportedExchange | null {
@@ -63,18 +72,37 @@ class ExchangeService {
 
     try {
       // Each exchange has different endpoints for testing connection
+      let result = false;
       switch (exchange) {
         case 'binance':
-          return await this.testBinanceConnection(credentials);
+          result = await this.testBinanceConnection(credentials);
+          break;
         case 'coinbase':
-          return await this.testCoinbaseConnection(credentials);
+          result = await this.testCoinbaseConnection(credentials);
+          break;
         case 'kraken':
-          return await this.testKrakenConnection(credentials);
+          result = await this.testKrakenConnection(credentials);
+          break;
         default:
           throw new Error(`Unsupported exchange: ${exchange}`);
       }
+      
+      if (result) {
+        toast.success(`Connection to ${exchange} successful`, {
+          description: "Your API credentials are valid"
+        });
+      } else {
+        toast.error(`Connection to ${exchange} failed`, {
+          description: "Please check your API credentials"
+        });
+      }
+      
+      return result;
     } catch (error) {
       console.error(`Failed to test connection to ${exchange}:`, error);
+      toast.error(`Connection to ${exchange} failed`, {
+        description: error instanceof Error ? error.message : "Unknown error occurred"
+      });
       throw error;
     }
   }

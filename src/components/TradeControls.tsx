@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
@@ -42,13 +41,11 @@ const TradeControls = () => {
   }, []);
   
   useEffect(() => {
-    // Store the interval ID with the correct type
     const refreshInterval = window.setInterval(() => {
       setCurrentPrice(prev => prev * (1 + (Math.random() - 0.5) * 0.001));
       setPriceChange(prev => Math.max(-5, Math.min(5, prev + (Math.random() - 0.5) * 0.1)));
     }, 5000);
     
-    // Clean up with the correct interval ID
     return () => {
       window.clearInterval(refreshInterval);
     };
@@ -91,6 +88,12 @@ const TradeControls = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+  
+  const handleSaveStrategy = () => {
+    toast.success("Strategy settings saved", {
+      description: `Your ${strategy} strategy has been updated successfully`
+    });
   };
   
   if (!isExchangeConnected) {
@@ -230,6 +233,14 @@ const TradeControls = () => {
               onCheckedChange={setNotificationsEnabled}
             />
           </div>
+          
+          <Button
+            className="w-full"
+            variant="success"
+            onClick={handleSaveStrategy}
+          >
+            Save Strategy Settings
+          </Button>
         </TabsContent>
         
         <TabsContent value="manual" className="space-y-6 pt-4">

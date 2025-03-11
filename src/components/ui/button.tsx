@@ -19,6 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 active:scale-95 transition-transform",
         ghost: "hover:bg-accent hover:text-accent-foreground active:scale-95 transition-transform",
         link: "text-primary underline-offset-4 hover:underline",
+        success: "bg-green-600 text-white hover:bg-green-700 active:scale-95 transition-transform",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -38,16 +39,38 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  showNotification?: boolean
+  notificationMessage?: string
+  notificationDescription?: string
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, showNotification = false, notificationMessage = "Success", notificationDescription = "Operation completed successfully", ...props }, ref) => {
+    // Import toast from the Sonner component to avoid circular dependencies
+    const { toast } = require("@/components/ui/sonner")
+    
     const Comp = asChild ? Slot : "button"
+    
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      // Call the original onClick handler if it exists
+      if (props.onClick) {
+        props.onClick(e);
+      }
+      
+      // Show notification if enabled
+      if (showNotification && !props.disabled) {
+        toast.success(notificationMessage, {
+          description: notificationDescription,
+        });
+      }
+    };
+    
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
+        onClick={handleClick}
       />
     )
   }

@@ -41,6 +41,14 @@ const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions = activeTrades })
     });
   };
 
+  const handleEditPosition = (position: TradePosition) => {
+    // This would typically open an edit form, but for now just show a notification
+    toast.info(`Editing position: ${position.symbol}`, {
+      description: "Position editing feature coming soon"
+    });
+    setSelectedPosition(null);
+  };
+
   return (
     <div className="content-panel">
       <div className="flex items-center justify-between mb-4">
@@ -164,7 +172,10 @@ const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions = activeTrades })
               </div>
 
               <div className="flex justify-between gap-2 mt-4">
-                <Button variant="outline" onClick={() => setSelectedPosition(null)}>
+                <Button 
+                  variant="outline"
+                  onClick={() => handleEditPosition(selectedPosition)}
+                >
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Position
                 </Button>
