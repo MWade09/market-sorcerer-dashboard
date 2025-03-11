@@ -5,7 +5,7 @@ import PerformanceMetrics from "@/components/PerformanceMetrics";
 import { AlertTriangle, TrendingUp, Activity, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MarketData, PerformanceMetric } from "@/lib/types";
+import { MarketData, PerformanceMetric, Cryptocurrency } from "@/lib/types";
 import TradeControls from "@/components/TradeControls";
 import MarketSignals from "@/components/MarketSignals";
 import RiskManagement from "@/components/RiskManagement";
@@ -13,11 +13,38 @@ import { performanceMetrics, bitcoinChartData } from "@/utils/mockData";
 
 interface DashboardProps {
   isRunning: boolean;
-  marketData: MarketData | null;
+  marketData: Cryptocurrency | null;
   isLoading: boolean;
 }
 
 const Dashboard = ({ isRunning, marketData, isLoading }: DashboardProps) => {
+  // Create a valid MarketData object from Cryptocurrency
+  const createMarketData = (crypto: Cryptocurrency | null): MarketData => {
+    if (!crypto) {
+      return {
+        price: 36789.45,
+        change24h: 2.54,
+        high24h: 38500.00,
+        low24h: 36300.00,
+        volume24h: 28765432000,
+        marketCap: 924567890000,
+        lastUpdated: new Date().toISOString()
+      };
+    }
+    
+    return {
+      price: crypto.price,
+      change24h: crypto.change24h,
+      high24h: crypto.price * 1.05, // Approximation
+      low24h: crypto.price * 0.95,  // Approximation
+      volume24h: crypto.volume24h,
+      marketCap: crypto.marketCap,
+      lastUpdated: new Date().toISOString()
+    };
+  };
+  
+  const marketDataFormatted = createMarketData(marketData);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div className="md:col-span-2 space-y-6">
@@ -30,7 +57,7 @@ const Dashboard = ({ isRunning, marketData, isLoading }: DashboardProps) => {
                   <Skeleton className="h-4 w-24" />
                 ) : (
                   <span className="text-lg font-semibold text-green-500">
-                    ${marketData?.price || "36,789.45"}
+                    ${marketDataFormatted.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                   </span>
                 )}
               </CardDescription>

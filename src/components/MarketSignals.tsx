@@ -45,10 +45,12 @@ const MarketSignals = () => {
                 <span>Overbought</span>
               </div>
               <ProgressWithIndicator 
-                value={signal.value} 
+                value={typeof signal.value === 'string' ? parseFloat(signal.value) : signal.value} 
                 max={signal.max}
                 className="h-2" 
-                indicatorClassName={getRsiIndicatorClass(signal.value)}
+                indicatorClassName={getRsiIndicatorClass(
+                  typeof signal.value === 'string' ? parseFloat(signal.value) : signal.value
+                )}
               />
               <div className="text-xs text-muted-foreground flex justify-between">
                 <span>{signal.min}</span>

@@ -18,7 +18,7 @@ import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics }
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
-  const { marketData, isLoading, getChartData } = useMarketData();
+  const { marketData, loading: isLoading, getChartData } = useMarketData();
   const [selectedTab, setSelectedTab] = useState("dashboard");
 
   const toggleBotStatus = () => {
@@ -71,7 +71,7 @@ const Index = () => {
           <TabsContent value="dashboard" className="mt-6">
             <Dashboard 
               isRunning={isRunning} 
-              marketData={marketData[0]} 
+              marketData={marketData && marketData.length > 0 ? marketData[0] : null} 
               isLoading={isLoading} 
             />
           </TabsContent>
