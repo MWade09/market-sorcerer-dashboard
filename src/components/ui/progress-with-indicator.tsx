@@ -1,30 +1,36 @@
 
-import React from "react";
-import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-interface ProgressWithIndicatorProps {
-  value: number;
-  max: number;
-  className?: string;
-  indicatorClassName?: string;
+export interface ProgressWithIndicatorProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  value: number
+  max?: number
+  indicatorClassName?: string
 }
 
-const ProgressWithIndicator = ({
-  value,
-  max,
-  className,
-  indicatorClassName,
-}: ProgressWithIndicatorProps) => {
-  return (
-    <div className={cn("relative w-full overflow-hidden rounded-full", className)}>
-      <Progress value={value} max={max} className={className} />
-      <div
-        className={cn("absolute top-0 left-0 h-full", indicatorClassName)}
-        style={{ width: `${(value / max) * 100}%` }}
-      />
-    </div>
-  );
-};
+const ProgressWithIndicator = React.forwardRef<HTMLDivElement, ProgressWithIndicatorProps>(
+  ({ className, value, max = 100, indicatorClassName, ...props }, ref) => {
+    const percentage = (value / max) * 100
 
-export { ProgressWithIndicator };
+    return (
+      <div
+        ref={ref}
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        className={cn("relative h-4 w-full overflow-hidden rounded-full bg-muted", className)}
+        {...props}
+      >
+        <div
+          className={cn("h-full w-full flex-1 bg-primary transition-all", indicatorClassName)}
+          style={{ transform: `translateX(-${100 - percentage}%)` }}
+        />
+      </div>
+    )
+  }
+)
+ProgressWithIndicator.displayName = "ProgressWithIndicator"
+
+export { ProgressWithIndicator }
