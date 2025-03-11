@@ -1,27 +1,28 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface User {
   id: string;
   email: string;
-  name: string;
+  name?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<{success: boolean, error?: string}>;
+  signup: (email: string, password: string, name: string) => Promise<{success: boolean, error?: string}>;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
-
-// Mock users - in a real app this would come from a database
-const MOCK_USERS = [
-  { id: '1', email: 'user1@example.com', password: 'password123', name: 'User One' },
-  { id: '2', email: 'user2@example.com', password: 'password123', name: 'User Two' },
-  { id: '3', email: 'user3@example.com', password: 'password123', name: 'User Three' },
-];
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -31,52 +32,108 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for existing login session in localStorage
-    const storedUser = localStorage.getItem('marketSorcererUser');
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error('Failed to parse stored user:', error);
-        localStorage.removeItem('marketSorcererUser');
+    // Get initial session
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        const userData = {
+          id: data.session.user.id,
+          email: data.session.user.email || '',
+          name: data.session.user.user_metadata.name || '',
+        };
+        setUser(userData);
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session) {
+          const userData = {
+            id: session.user.id,
+            email: session.user.email || '',
+            name: session.user.user_metadata.name || '',
+          };
+          setUser(userData);
+        } else {
+          setUser(null);
+        }
+        setIsLoading(false);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const signup = async (email: string, password: string, name: string): Promise<{success: boolean, error?: string}> => {
     setIsLoading(true);
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Find user
-    const matchedUser = MOCK_USERS.find(
-      u => u.email === email && u.password === password
-    );
-    
-    if (matchedUser) {
-      // Create user object without the password
-      const { password, ...userWithoutPassword } = matchedUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('marketSorcererUser', JSON.stringify(userWithoutPassword));
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+          },
+        },
+      });
+      
+      if (error) {
+        setIsLoading(false);
+        return { success: false, error: error.message };
+      }
+      
+      // Note: The user is not fully authenticated until they confirm their email
+      if (data.user) {
+        return { success: true };
+      } else {
+        return { success: false, error: 'An unknown error occurred' };
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      return { success: false, error: 'An unexpected error occurred during signup' };
+    } finally {
       setIsLoading(false);
-      return true;
     }
-    
-    setIsLoading(false);
-    return false;
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('marketSorcererUser');
+  const login = async (email: string, password: string): Promise<{success: boolean, error?: string}> => {
+    setIsLoading(true);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) {
+        setIsLoading(false);
+        return { success: false, error: error.message };
+      }
+      
+      if (data.user) {
+        return { success: true };
+      } else {
+        return { success: false, error: 'Invalid credentials' };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: 'An unexpected error occurred during login' };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
     navigate('/login');
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, signup, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
