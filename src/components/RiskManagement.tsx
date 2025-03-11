@@ -21,6 +21,17 @@ const RiskManagement = () => {
   const calculatedStopLoss = entryPrice * (1 - stopLoss / 100);
   const calculatedTakeProfit = entryPrice * (1 + takeProfit / 100);
 
+  const handleUpdateRiskSettings = () => {
+    // In a real application, this would make an API call to save the settings
+    console.log("Risk settings updated:", {
+      stopLoss,
+      takeProfit,
+      useTrailingStop,
+      trailingStop: useTrailingStop ? trailingStop : null,
+      maxPosition
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -135,7 +146,16 @@ const RiskManagement = () => {
       </div>
 
       <div className="flex justify-end pt-2">
-        <Button variant="outline" className="w-full">Update Risk Settings</Button>
+        <Button 
+          variant="success" 
+          className="w-full"
+          onClick={handleUpdateRiskSettings}
+          showNotification={true}
+          notificationMessage="Risk Settings Updated"
+          notificationDescription="Your risk management parameters have been successfully updated"
+        >
+          Update Risk Settings
+        </Button>
       </div>
     </div>
   );
