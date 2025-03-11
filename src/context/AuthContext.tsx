@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import { toast } from "@/components/ui/sonner";
 
-// Safely access environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Safely access environment variables with custom names
+const supabaseUrl = import.meta.env.VITE_CRYPTOBOT_URL;
+const supabaseAnonKey = import.meta.env.VITE_CRYPTOBOT_ANON_KEY;
 
 // Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
