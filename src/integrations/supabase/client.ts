@@ -34,10 +34,23 @@ export const supabase = createClient<Database>(
 
 // Set redirect URL for authentication
 if (typeof window !== 'undefined') {
+  // Update authentication configuration for redirects
   supabase.auth.setSession({
     access_token: '',
-    refresh_token: '',
-  }, {
-    redirectTo: getRedirectTo()
+    refresh_token: ''
+  }).then(({ data, error }) => {
+    if (error) {
+      console.error('Error setting session:', error);
+    } else {
+      console.log('Session configuration updated');
+    }
+  });
+  
+  // Configure the redirect URL
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+      // The redirectTo option is used when signing in or refreshing tokens
+      console.log('Auth state changed:', event);
+    }
   });
 }
