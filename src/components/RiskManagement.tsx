@@ -42,8 +42,8 @@ const RiskManagement = () => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <div className="flex justify-between">
-          <Label htmlFor="stop-loss">Stop Loss</Label>
+        <div className="flex justify-between items-center flex-wrap">
+          <Label htmlFor="stop-loss" className="mb-1">Stop Loss</Label>
           <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
             <AlertTriangle className="mr-1 h-3 w-3" /> -{stopLoss}%
           </Badge>
@@ -68,8 +68,8 @@ const RiskManagement = () => {
       <Separator />
 
       <div className="space-y-2">
-        <div className="flex justify-between">
-          <Label htmlFor="take-profit">Take Profit</Label>
+        <div className="flex justify-between items-center flex-wrap">
+          <Label htmlFor="take-profit" className="mb-1">Take Profit</Label>
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
             <TrendingUp className="mr-1 h-3 w-3" /> +{takeProfit}%
           </Badge>
@@ -93,8 +93,8 @@ const RiskManagement = () => {
 
       <Separator />
 
-      <div className="flex items-center justify-between">
-        <div className="space-y-0.5">
+      <div className="flex items-center justify-between flex-wrap">
+        <div className="space-y-0.5 mb-2 sm:mb-0">
           <Label htmlFor="trailing-stop" className="cursor-pointer">Trailing Stop</Label>
           <div className="text-sm text-muted-foreground">Adjusts as price moves in your favor</div>
         </div>
