@@ -2,17 +2,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
+import { toast } from "@/components/ui/sonner";
 
-// Initialize Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Safely access environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Check if the environment variables are set
+// Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase URL or Anon Key is missing. Please check your environment variables.');
+  console.error('Supabase URL or Anon Key is missing. Please check your Supabase integration in Lovable.');
+  // We'll provide a fallback client that will show proper error messages to users
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Initialize Supabase client
+const supabase = createClient(
+  supabaseUrl || 'https://placeholder-url.supabase.co', 
+  supabaseAnonKey || 'placeholder-key'
+);
 
 interface User {
   id: string;
@@ -37,6 +43,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if Supabase is properly configured
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setIsLoading(false);
+      toast.error("Authentication configuration error", {
+        description: "Please check your Supabase integration in Lovable.",
+      });
+      return;
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
@@ -73,6 +88,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signup = async (email: string, password: string, name: string): Promise<{success: boolean, error?: string}> => {
+    // Check if Supabase is properly configured
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return { 
+        success: false, 
+        error: "Authentication is not properly configured. Please check Supabase integration." 
+      };
+    }
+
     setIsLoading(true);
     
     try {
@@ -106,6 +129,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const login = async (email: string, password: string): Promise<{success: boolean, error?: string}> => {
+    // Check if Supabase is properly configured
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return { 
+        success: false, 
+        error: "Authentication is not properly configured. Please check Supabase integration." 
+      };
+    }
+
     setIsLoading(true);
     
     try {
