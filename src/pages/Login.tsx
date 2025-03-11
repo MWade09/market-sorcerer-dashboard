@@ -14,7 +14,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, showSupabaseConfigError } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,6 +39,27 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+
+  // Don't show form errors if there's a Supabase configuration error
+  if (showSupabaseConfigError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold tracking-tight">Configuration Required</CardTitle>
+            <CardDescription>
+              Supabase integration needs to be configured
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center mb-4">
+              Please check the dialog for instructions on how to set up Supabase integration.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
