@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { AlertTriangle, TrendingUp } from "lucide-react";
+import { toast } from "sonner";
 
 const RiskManagement = () => {
   const [stopLoss, setStopLoss] = useState(5);
@@ -29,6 +30,12 @@ const RiskManagement = () => {
       useTrailingStop,
       trailingStop: useTrailingStop ? trailingStop : null,
       maxPosition
+    });
+    
+    // Show success toast notification
+    toast.success("Risk Settings Updated", {
+      description: "Your risk management parameters have been successfully updated",
+      duration: 3000,
     });
   };
 
@@ -147,12 +154,8 @@ const RiskManagement = () => {
 
       <div className="flex justify-end pt-2">
         <Button 
-          variant="success" 
-          className="w-full"
           onClick={handleUpdateRiskSettings}
-          showNotification={true}
-          notificationMessage="Risk Settings Updated"
-          notificationDescription="Your risk management parameters have been successfully updated"
+          className="w-full"
         >
           Update Risk Settings
         </Button>
