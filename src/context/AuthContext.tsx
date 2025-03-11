@@ -1,7 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
 import { toast } from "@/components/ui/sonner";
 import {
   Dialog,
@@ -12,21 +11,7 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
-// Safely access environment variables with custom names
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_CRYPTOBOT_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_CRYPTOBOT_ANON_KEY;
-
-// Debug environment variables
-console.log("Supabase URL available:", !!supabaseUrl);
-console.log("Supabase Anon Key available:", !!supabaseAnonKey);
-console.log("All env vars:", Object.keys(import.meta.env).filter(key => key.startsWith('VITE_')));
-
-// Initialize Supabase client
-const supabase = createClient(
-  supabaseUrl || 'https://placeholder-url.supabase.co', 
-  supabaseAnonKey || 'placeholder-key'
-);
+import { supabase } from "@/integrations/supabase/client";
 
 interface User {
   id: string;
@@ -58,13 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    // Check if Supabase is properly configured
-    if (!supabaseUrl || !supabaseAnonKey) {
-      setIsLoading(false);
-      setShowSupabaseConfigError(true);
-      return;
-    }
-
+    console.log("AuthProvider mounted");
+    
     // Get initial session
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
@@ -87,6 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Auth state changed:", event);
         if (session) {
           const userData = {
             id: session.user.id,
@@ -107,15 +88,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signup = async (email: string, password: string, name: string): Promise<{success: boolean, error?: string}> => {
-    // Check if Supabase is properly configured
-    if (!supabaseUrl || !supabaseAnonKey) {
-      setShowSupabaseConfigError(true);
-      return { 
-        success: false, 
-        error: "Authentication is not properly configured. Please check Supabase integration." 
-      };
-    }
-
     setIsLoading(true);
     
     try {
@@ -134,8 +106,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { success: false, error: error.message };
       }
       
-      // Note: The user is not fully authenticated until they confirm their email
       if (data.user) {
+        toast.success("Signup successful!", {
+          description: "Please check your email for verification.",
+        });
         return { success: true };
       } else {
         return { success: false, error: 'An unknown error occurred' };
@@ -149,15 +123,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const login = async (email: string, password: string): Promise<{success: boolean, error?: string}> => {
-    // Check if Supabase is properly configured
-    if (!supabaseUrl || !supabaseAnonKey) {
-      setShowSupabaseConfigError(true);
-      return { 
-        success: false, 
-        error: "Authentication is not properly configured. Please check Supabase integration." 
-      };
-    }
-
     setIsLoading(true);
     
     try {
@@ -203,33 +168,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }}
     >
       {children}
-      <Dialog open={showSupabaseConfigError} onOpenChange={setShowSupabaseConfigError}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Supabase Configuration Required</DialogTitle>
-            <DialogDescription>
-              To use authentication features, you need to configure your Supabase integration with Lovable.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <p>Please follow these steps:</p>
-            <ol className="list-decimal ml-5 space-y-2">
-              <li>Click the Supabase button in the top navigation menu</li>
-              <li>Connect to your Supabase project or create a new one</li>
-              <li>Ensure the environment variables are properly configured</li>
-              <li>The following variables need to be set:
-                <ul className="list-disc ml-5 mt-2">
-                  <li>VITE_SUPABASE_URL or VITE_CRYPTOBOT_URL</li>
-                  <li>VITE_SUPABASE_ANON_KEY or VITE_CRYPTOBOT_ANON_KEY</li>
-                </ul>
-              </li>
-            </ol>
-          </div>
-          <DialogFooter>
-            <Button onClick={closeSupabaseConfigError}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </AuthContext.Provider>
   );
 };
