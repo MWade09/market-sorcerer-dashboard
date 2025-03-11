@@ -1,7 +1,7 @@
 
 # Market Sorcerer - Automated Cryptocurrency Trading Bot
 
-![Market Sorcerer](public/og-image.png)
+![Market Sorcerer](public/Dashboard.PNG)
 
 Market Sorcerer is a powerful, customizable trading bot that helps you automate your cryptocurrency trading strategies. With a user-friendly interface and a variety of pre-built strategies, Market Sorcerer enables both beginners and experienced traders to participate in the crypto markets with confidence.
 
