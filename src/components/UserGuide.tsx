@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Tabs, 
@@ -27,7 +28,16 @@ import {
   BookOpen,
   GraduationCap,
   LineChart,
-  Activity
+  Activity,
+  Rocket,
+  Key,
+  Compass,
+  Flag,
+  CheckCircle,
+  Info,
+  HelpCircle,
+  Lightbulb,
+  List
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -51,18 +61,331 @@ const UserGuide = () => {
         </AlertDescription>
       </Alert>
 
-      <Tabs defaultValue="learn" className="w-full">
+      <Tabs defaultValue="getting-started" className="w-full">
         <TabsList className="grid grid-cols-5 mb-4">
+          <TabsTrigger value="getting-started">
+            <Rocket className="h-4 w-4 mr-1 md:mr-2" />
+            <span className="hidden md:inline">Getting Started</span>
+            <span className="md:hidden">Start</span>
+          </TabsTrigger>
           <TabsTrigger value="learn">
             <GraduationCap className="h-4 w-4 mr-1 md:mr-2" />
             <span className="hidden md:inline">Learning Path</span>
             <span className="md:hidden">Learn</span>
           </TabsTrigger>
-          <TabsTrigger value="getting-started">Getting Started</TabsTrigger>
           <TabsTrigger value="strategies">Strategies</TabsTrigger>
           <TabsTrigger value="testing">Testing</TabsTrigger>
           <TabsTrigger value="advanced">Advanced</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="getting-started" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Rocket className="h-5 w-5" />
+                Setup Guide
+              </CardTitle>
+              <CardDescription>
+                Follow these steps to set up your automated trading bot
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="bg-accent/50 rounded-lg p-4 border border-accent">
+                  <h3 className="font-medium text-lg flex items-center gap-2 mb-4">
+                    <Flag className="h-5 w-5" />
+                    Step 1: Connect Exchange Account
+                  </h3>
+                  <ol className="list-decimal pl-5 space-y-3 text-sm">
+                    <li className="mb-3">
+                      <span className="font-medium">Create API Keys on your Exchange</span>
+                      <p className="text-muted-foreground mt-1">
+                        Log in to your exchange account and navigate to the API management section to create a new API key pair.
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Set Proper Permissions</span>
+                      <p className="text-muted-foreground mt-1">
+                        For testing, enable "Read" permissions only. When ready for live trading, add "Trading" permissions but never enable "Withdrawal" permissions.
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Add IP Restrictions</span>
+                      <p className="text-muted-foreground mt-1">
+                        For enhanced security, restrict API access to your specific IP address if available.
+                      </p>
+                    </li>
+                    <li>
+                      <span className="font-medium">Add API Keys to Market Sorcerer</span>
+                      <p className="text-muted-foreground mt-1">
+                        In the application, click the "Settings" button and navigate to the "Exchanges" tab. Add your API key pair and label it appropriately.
+                      </p>
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="bg-accent/50 rounded-lg p-4 border border-accent">
+                  <h3 className="font-medium text-lg flex items-center gap-2 mb-4">
+                    <Compass className="h-5 w-5" />
+                    Step 2: Select Trading Strategy
+                  </h3>
+                  <ol className="list-decimal pl-5 space-y-3 text-sm">
+                    <li className="mb-3">
+                      <span className="font-medium">Choose a Strategy Type</span>
+                      <p className="text-muted-foreground mt-1">
+                        In the Settings panel, go to the "Strategies" tab. Browse through available strategies and select one that matches your trading style and risk tolerance.
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Configure Strategy Parameters</span>
+                      <p className="text-muted-foreground mt-1">
+                        Adjust the default settings as needed. Parameters may include indicator periods, signal thresholds, and timeframes.
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Select Trading Pairs</span>
+                      <p className="text-muted-foreground mt-1">
+                        Choose which cryptocurrency pairs your strategy will trade (e.g., BTC/USDT, ETH/USDT).
+                      </p>
+                    </li>
+                    <li>
+                      <span className="font-medium">Save Your Configuration</span>
+                      <p className="text-muted-foreground mt-1">
+                        Don't forget to save your strategy settings before proceeding to the next step.
+                      </p>
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="bg-accent/50 rounded-lg p-4 border border-accent">
+                  <h3 className="font-medium text-lg flex items-center gap-2 mb-4">
+                    <Key className="h-5 w-5" />
+                    Step 3: Configure Risk Parameters
+                  </h3>
+                  <ol className="list-decimal pl-5 space-y-3 text-sm">
+                    <li className="mb-3">
+                      <span className="font-medium">Set Position Size</span>
+                      <p className="text-muted-foreground mt-1">
+                        In the Settings panel, navigate to the "Risk Management" tab. Define how much capital to allocate per trade (fixed amount or percentage).
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Configure Stop-Loss Settings</span>
+                      <p className="text-muted-foreground mt-1">
+                        Set up automatic stop-losses to limit potential losses. This can be a fixed percentage, dollar amount, or based on technical levels.
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Set Take-Profit Levels</span>
+                      <p className="text-muted-foreground mt-1">
+                        Configure when the bot should lock in profits. Consider using multiple take-profit levels to maximize returns.
+                      </p>
+                    </li>
+                    <li>
+                      <span className="font-medium">Set Maximum Positions</span>
+                      <p className="text-muted-foreground mt-1">
+                        Limit the number of concurrent open positions to manage overall portfolio risk.
+                      </p>
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="bg-accent/50 rounded-lg p-4 border border-accent">
+                  <h3 className="font-medium text-lg flex items-center gap-2 mb-4">
+                    <Play className="h-5 w-5" />
+                    Step 4: Start Trading
+                  </h3>
+                  <ol className="list-decimal pl-5 space-y-3 text-sm">
+                    <li className="mb-3">
+                      <span className="font-medium">Verify Settings</span>
+                      <p className="text-muted-foreground mt-1">
+                        Double-check all your configurations before starting the bot.
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Start in Test Mode First</span>
+                      <p className="text-muted-foreground mt-1">
+                        Always begin with paper trading or a small amount to verify the strategy works as expected.
+                      </p>
+                    </li>
+                    <li className="mb-3">
+                      <span className="font-medium">Activate the Bot</span>
+                      <p className="text-muted-foreground mt-1">
+                        Click the "Start Bot" button in the main dashboard to begin automated trading.
+                      </p>
+                    </li>
+                    <li>
+                      <span className="font-medium">Monitor Performance</span>
+                      <p className="text-muted-foreground mt-1">
+                        Regularly check the dashboard and active trades to monitor performance. Adjust strategy parameters if needed.
+                      </p>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+
+              <div className="mt-6 space-y-4">
+                <h3 className="font-medium text-lg flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5" />
+                  Quick Start Checklist
+                </h3>
+                <ul className="pl-5 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                    <span>Create and connect exchange API keys</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                    <span>Select and configure a trading strategy</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                    <span>Set up risk management parameters</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                    <span>Start with test mode or small position sizes</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                    <span>Activate the bot and monitor performance</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="mt-4">
+                <Alert className="bg-muted border-muted-foreground/20">
+                  <HelpCircle className="h-4 w-4" />
+                  <AlertTitle>Need Help?</AlertTitle>
+                  <AlertDescription className="flex flex-col gap-2">
+                    <p>If you encounter any issues during setup, check the following resources:</p>
+                    <ul className="list-disc pl-5 space-y-1 text-sm">
+                      <li>Detailed documentation for each exchange in the "Advanced" tab</li>
+                      <li>Troubleshooting guide for common connection problems</li>
+                      <li>Community forums for peer assistance and strategy sharing</li>
+                    </ul>
+                  </AlertDescription>
+                </Alert>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="h-5 w-5" />
+                Understanding the Dashboard
+              </CardTitle>
+              <CardDescription>
+                Navigate the Market Sorcerer interface effectively
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-4">
+                  <h3 className="font-medium">Dashboard Components</h3>
+                  <ul className="space-y-3 text-sm">
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Market Overview</p>
+                      <p className="text-muted-foreground">Displays current market data for selected trading pairs, including price, 24h change, and volume.</p>
+                    </li>
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Performance Metrics</p>
+                      <p className="text-muted-foreground">Shows bot trading performance including profit/loss, win rate, and number of trades.</p>
+                    </li>
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Price Chart</p>
+                      <p className="text-muted-foreground">Interactive chart displaying price history and technical indicators for selected assets.</p>
+                    </li>
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Active Trades</p>
+                      <p className="text-muted-foreground">Lists all currently open positions with entry price, current price, and profit/loss.</p>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="font-medium">Key Controls & Navigation</h3>
+                  <ul className="space-y-3 text-sm">
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Start/Stop Button</p>
+                      <p className="text-muted-foreground">Toggles the bot's active trading status. Green when inactive, red when actively trading.</p>
+                    </li>
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Settings Button</p>
+                      <p className="text-muted-foreground">Opens the configuration panel for exchanges, strategies, and risk management.</p>
+                    </li>
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Tab Navigation</p>
+                      <p className="text-muted-foreground">Switch between Dashboard, Trades, History, and Guide sections using the tabs at the top.</p>
+                    </li>
+                    <li className="border-l-2 border-primary pl-3 py-1">
+                      <p className="font-medium">Timeframe Selector</p>
+                      <p className="text-muted-foreground">Change the chart timeframe (1m, 5m, 15m, 1h, 4h, 1d) to view different trading intervals.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <h3 className="font-medium mb-3">Interpreting Signals & Alerts</h3>
+                <p className="text-sm mb-3">The Dashboard displays various signals to help you understand the bot's decision-making:</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-muted rounded-md p-3">
+                    <h4 className="text-sm font-medium mb-2 flex items-center gap-1">
+                      <Lightbulb className="h-4 w-4 text-yellow-500" />
+                      Trading Signals
+                    </h4>
+                    <ul className="space-y-2 text-xs">
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        <span><strong>Green:</strong> Buy signal detected</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                        <span><strong>Red:</strong> Sell signal detected</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+                        <span><strong>Yellow:</strong> Potential setup forming</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+                        <span><strong>Blue:</strong> Market condition filter active</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-muted rounded-md p-3">
+                    <h4 className="text-sm font-medium mb-2 flex items-center gap-1">
+                      <List className="h-4 w-4 text-blue-500" />
+                      Status Indicators
+                    </h4>
+                    <ul className="space-y-2 text-xs">
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        <span><strong>Green Badge:</strong> Connection active</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                        <span><strong>Red Badge:</strong> Connection error</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+                        <span><strong>Yellow Badge:</strong> Warning or limited functionality</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-gray-500"></div>
+                        <span><strong>Gray Badge:</strong> Inactive or disabled</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         
         <TabsContent value="learn" className="space-y-4">
           <Card>
