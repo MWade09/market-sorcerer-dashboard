@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Tabs, 
@@ -12,7 +11,20 @@ import {
   AccordionItem, 
   AccordionTrigger 
 } from '@/components/ui/accordion';
-import { AlertCircle, Terminal, Sparkles, Wrench, Code, PenTool, Play, FileText } from 'lucide-react';
+import { 
+  AlertCircle, 
+  Terminal, 
+  Sparkles, 
+  Wrench, 
+  Code, 
+  PenTool, 
+  Play, 
+  FileText,
+  BarChart2,
+  TrendingUp as TrendingUpIcon,
+  RefreshCw,
+  DollarSign as DollarSignIcon
+} from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
@@ -144,7 +156,7 @@ const UserGuide = () => {
                 <AccordionItem value="item-1">
                   <AccordionTrigger>
                     <div className="flex items-center gap-2">
-                      <BarChart3 className="h-4 w-4" />
+                      <BarChart2 className="h-4 w-4" />
                       <span>Momentum Strategies</span>
                     </div>
                   </AccordionTrigger>
@@ -168,7 +180,7 @@ const UserGuide = () => {
                 <AccordionItem value="item-2">
                   <AccordionTrigger>
                     <div className="flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4" />
+                      <TrendingUpIcon className="h-4 w-4" />
                       <span>Trend Following Strategies</span>
                     </div>
                   </AccordionTrigger>
@@ -193,7 +205,7 @@ const UserGuide = () => {
                 <AccordionItem value="item-3">
                   <AccordionTrigger>
                     <div className="flex items-center gap-2">
-                      <Shuffle className="h-4 w-4" />
+                      <RefreshCw className="h-4 w-4" />
                       <span>Mean Reversion & Volatility Strategies</span>
                     </div>
                   </AccordionTrigger>
@@ -217,7 +229,7 @@ const UserGuide = () => {
                 <AccordionItem value="item-4">
                   <AccordionTrigger>
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4" />
+                      <DollarSignIcon className="h-4 w-4" />
                       <span>Dollar Cost Averaging (DCA)</span>
                     </div>
                   </AccordionTrigger>
