@@ -46,7 +46,9 @@ const TradeControls = () => {
       setPriceChange(prev => Math.max(-5, Math.min(5, prev + (Math.random() - 0.5) * 0.1)));
     }, 5000);
     
-    return () => clearInterval(refreshInterval);
+    return () => {
+      clearInterval(refreshInterval);
+    };
   }, []);
   
   const calculateOrderValue = () => {
