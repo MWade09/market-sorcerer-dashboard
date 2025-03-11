@@ -28,7 +28,10 @@ export const supabase = createClient<Database>(
       persistSession: true,
       detectSessionInUrl: true,
       flowType: 'pkce',
-      redirectTo: getRedirectTo()
+      // Place redirectTo in the options.global object instead of directly in auth
+      global: {
+        redirectTo: getRedirectTo()
+      }
     }
   }
 );
