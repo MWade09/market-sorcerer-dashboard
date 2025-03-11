@@ -1,102 +1,46 @@
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
-export type Exchange = 'binance' | 'coinbase' | 'kraken';
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
-export type TimeFrame = '1m' | '5m' | '15m' | '1h' | '4h' | '1d' | '1w';
-
-export type TradingStrategyType = 
-  | 'momentum' 
-  | 'trend_following' 
-  | 'arbitrage'
-  | 'dca'
-  | 'custom';
-
-export type TradingStrategy = {
-  id: string;
-  name: string;
-  type: TradingStrategyType;
-  description: string;
-  config: Record<string, any>;
-  isActive: boolean;
-  riskLevel: 'low' | 'medium' | 'high';
-};
-
-export type Cryptocurrency = {
-  symbol: string;
-  name: string;
+export interface MarketData {
   price: number;
   change24h: number;
+  high24h: number;
+  low24h: number;
   volume24h: number;
   marketCap: number;
-  image?: string;
-};
+  lastUpdated: string;
+}
 
-export type ChartData = {
-  time: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-};
-
-export type TradePosition = {
+export interface Trade {
   id: string;
-  symbol: string;
-  exchange: Exchange;
-  type: 'long' | 'short';
+  pair: string;
+  type: 'buy' | 'sell';
   entryPrice: number;
-  quantity: number;
   currentPrice: number;
-  pnl: number;
-  pnlPercentage: number;
-  openTime: Date;
+  amount: number;
+  leverage: number;
+  profit: number;
+  profitPercentage: number;
+  timestamp: string;
   strategy: string;
-  stopLoss?: number;
-  takeProfit?: number;
-};
+}
 
-export type TradeHistory = {
+export interface TradingStrategy {
   id: string;
-  symbol: string;
-  exchange: Exchange;
-  type: 'long' | 'short';
-  entryPrice: number;
-  exitPrice: number;
-  quantity: number;
-  pnl: number;
-  pnlPercentage: number;
-  openTime: Date;
-  closeTime: Date;
-  strategy: string;
-  isProfit: boolean;
-};
-
-export type ExchangeAccount = {
-  exchange: Exchange;
   name: string;
-  apiKeyConfigured: boolean;
-  balance: number;
-  isActive: boolean;
-  logo: string;
-};
+  description: string;
+  riskLevel: 'low' | 'medium' | 'high';
+  timeframe: string;
+  indicators: string[];
+}
 
-export type PerformanceMetric = {
-  label: string;
-  value: string | number;
-  change?: number;
-  info?: string;
-};
-
-export type BacktestResult = {
-  strategyId: string;
-  symbol: string;
-  timeframe: TimeFrame;
-  startDate: Date;
-  endDate: Date;
-  trades: number;
-  winRate: number;
-  profitFactor: number;
-  totalReturn: number;
-  maxDrawdown: number;
-  sharpeRatio: number;
-};
+export interface Exchange {
+  id: string;
+  name: string;
+  icon: string;
+  status: 'connected' | 'disconnected';
+}
