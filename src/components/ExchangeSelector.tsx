@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Key, 
@@ -14,7 +13,6 @@ import {
 import { ExchangeAccount } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -68,7 +66,7 @@ const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges }) => {
               Connect Exchange
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Connect Exchange</DialogTitle>
             </DialogHeader>
@@ -115,7 +113,7 @@ const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges }) => {
                 </button>
               </div>
             ) : (
-              <div className="py-4">
+              <div className="py-4 space-y-4">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-8 h-8 bg-accent flex items-center justify-center rounded-md">
                     <span className="text-xl font-bold">
@@ -125,7 +123,7 @@ const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges }) => {
                   <h3 className="font-medium capitalize">{selectedExchange}</h3>
                 </div>
                 
-                <div className="mb-6">
+                <div className="mb-4">
                   <p className="text-sm text-muted-foreground">
                     Enter your API keys from {selectedExchange}. The bot only needs read and trade permissions, 
                     <span className="font-medium"> do not enable withdrawal permissions.</span>

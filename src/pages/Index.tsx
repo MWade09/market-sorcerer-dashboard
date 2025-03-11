@@ -9,11 +9,12 @@ import ActiveTrades from "@/components/ActiveTrades";
 import ExchangeSelector from "@/components/ExchangeSelector";
 import StrategySelector from "@/components/StrategySelector";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Settings, History, ChevronDown } from "lucide-react";
+import { Play, Pause, Settings, History, ChevronDown, Book } from "lucide-react";
 import { useMarketData } from "@/hooks/useMarketData";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Dashboard from "@/components/Dashboard";
 import TradingHistory from "@/components/TradingHistory";
+import UserGuide from "@/components/UserGuide";
 import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics } from "@/utils/mockData";
 
 const Index = () => {
@@ -45,8 +46,8 @@ const Index = () => {
                   Settings <ChevronDown size={16} />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-80">
-                <div className="grid gap-4">
+              <PopoverContent className="w-80 p-0" align="end">
+                <div className="grid gap-4 p-4">
                   <h4 className="font-medium leading-none">Bot Configuration</h4>
                   <Separator />
                   <div className="grid gap-2">
@@ -62,10 +63,14 @@ const Index = () => {
 
       <main className="container py-6">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid w-full md:w-auto grid-cols-3">
+          <TabsList className="grid w-full md:w-auto grid-cols-4">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="trades">Trades</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
+            <TabsTrigger value="guide">
+              <Book size={16} className="mr-1" />
+              User Guide
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="dashboard" className="mt-6">
@@ -109,6 +114,23 @@ const Index = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+          
+          <TabsContent value="guide" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Book size={18} />
+                  User Guide
+                </CardTitle>
+                <CardDescription>
+                  Learn how to set up, test, and customize your trading bot
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <UserGuide />
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </main>

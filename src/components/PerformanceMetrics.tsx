@@ -55,7 +55,7 @@ const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({ metrics }) => {
               )}
             </div>
             
-            <div className="text-base font-medium">
+            <div className="text-base font-medium truncate">
               {metric.value}
             </div>
             

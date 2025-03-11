@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   ChevronRight, 
@@ -188,7 +187,7 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
               New Strategy
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Create New Strategy</DialogTitle>
             </DialogHeader>
@@ -270,16 +269,15 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
         </div>
       )}
 
-      {/* Strategy Edit Dialog */}
       <Dialog open={!!selectedStrategy} onOpenChange={(open) => !open && setSelectedStrategy(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Strategy Settings</DialogTitle>
           </DialogHeader>
           {selectedStrategy && (
-            <div>
+            <div className="space-y-4 py-2">
               <p className="text-sm font-medium mb-1">{selectedStrategy.name}</p>
-              <p className="text-sm text-muted-foreground mb-4">{selectedStrategy.description}</p>
+              <p className="text-sm text-muted-foreground mb-2">{selectedStrategy.description}</p>
               
               <div className="space-y-4">
                 {selectedStrategy.type === 'momentum' && (
@@ -355,7 +353,7 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
                 </div>
               </div>
               
-              <Separator className="my-4" />
+              <Separator className="my-2" />
               
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setSelectedStrategy(null)}>
