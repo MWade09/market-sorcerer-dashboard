@@ -86,8 +86,10 @@ export interface TradeHistory {
   isProfit: boolean;
 }
 
-export type TradingStrategyType = 'momentum' | 'trend_following' | 'arbitrage' | 'dca';
+// Updated to include the new strategy types
+export type TradingStrategyType = 'momentum' | 'trend_following' | 'arbitrage' | 'dca' | 'machine_learning' | 'mean_reversion';
 
+// Updated TradingStrategy interface to include advancedParams
 export interface TradingStrategy {
   id: string;
   name: string;
@@ -98,6 +100,29 @@ export interface TradingStrategy {
   type: TradingStrategyType;
   isActive: boolean;
   config: any;
+  advancedParams?: {
+    positionSize?: number;
+    allowPyramiding?: boolean;
+    useStopLoss?: boolean;
+    stopLossPercentage?: number;
+    useTakeProfit?: boolean;
+    takeProfitPercentage?: number;
+    useTrailingStop?: boolean;
+    trailingStopPercentage?: number;
+    useVolume?: boolean;
+    volumeThreshold?: number;
+    additionalIndicator?: string;
+    modelType?: string;
+    features?: {
+      price?: boolean;
+      volume?: boolean;
+      indicators?: boolean;
+      sentiment?: boolean;
+    };
+    trainingFrequency?: string;
+    lookbackPeriod?: number;
+    [key: string]: any;
+  };
 }
 
 export interface Exchange {
