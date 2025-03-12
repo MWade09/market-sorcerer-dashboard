@@ -398,150 +398,179 @@ const UserGuide = () => {
                 Master the basics of trading with our structured learning path
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 px-4">
               {/* Level 1: Basics */}
-              <div className="bg-accent/50 rounded-lg p-4 border border-accent">
-                <h3 className="font-medium text-lg flex items-center gap-2 mb-2">
+              <div className="bg-accent/50 rounded-lg p-6 border border-accent">
+                <h3 className="font-medium text-lg flex items-center gap-2 mb-4">
                   <BookOpen className="h-5 w-5" />
                   Level 1: Trading Fundamentals
                 </h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-sm mb-2">1. Understanding Market Basics</h4>
-                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                      <li>What moves cryptocurrency prices?
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Supply and demand dynamics</li>
-                          <li>Market sentiment and news impact</li>
-                          <li>Technical vs fundamental analysis</li>
+                <div className="space-y-5 px-2">
+                  <div className="bg-background/50 p-4 rounded-md">
+                    <h4 className="font-medium text-base mb-3">1. Understanding Market Basics</h4>
+                    <div className="space-y-4 pl-2">
+                      <div>
+                        <p className="font-medium mb-2">What moves cryptocurrency prices?</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Supply and demand dynamics - how buying and selling pressure affect price</li>
+                          <li>Market sentiment and news impact - how announcements, regulations, and events drive market movements</li>
+                          <li>Technical vs fundamental analysis - comparing price pattern-based analysis with economic factor analysis</li>
                         </ul>
-                      </li>
-                      <li>Different types of orders
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Market orders vs limit orders</li>
-                          <li>Stop-loss and take-profit orders</li>
-                          <li>OCO (One Cancels Other) orders</li>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">Different types of orders</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Market orders vs limit orders - execute immediately at market price or set your desired price</li>
+                          <li>Stop-loss orders - automatically sell when price falls to your specified level</li>
+                          <li>Take-profit orders - automatically lock in profits at your target price</li>
+                          <li>OCO (One Cancels Other) orders - combine stop-loss and take-profit in one instruction</li>
                         </ul>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-medium text-sm mb-2">2. Risk Management Fundamentals</h4>
-                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                      <li>Position sizing principles
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Never risk more than 1-2% per trade</li>
-                          <li>Calculate position size based on stop loss</li>
-                          <li>Account for market volatility</li>
+                  <div className="bg-background/50 p-4 rounded-md">
+                    <h4 className="font-medium text-base mb-3">2. Risk Management Fundamentals</h4>
+                    <div className="space-y-4 pl-2">
+                      <div>
+                        <p className="font-medium mb-2">Position sizing principles</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Never risk more than 1-2% of your trading capital on a single trade</li>
+                          <li>Calculate position size based on stop loss placement to manage risk</li>
+                          <li>Account for market volatility - reduce position sizes in highly volatile markets</li>
+                          <li>Diversification across multiple assets to reduce concentrated risk</li>
                         </ul>
-                      </li>
-                      <li>Setting stop losses
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Technical levels for stop placement</li>
-                          <li>Using ATR for stop loss calculation</li>
-                          <li>Trailing stops vs fixed stops</li>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">Setting effective stop losses</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Technical levels for stop placement - using support/resistance levels</li>
+                          <li>Using ATR (Average True Range) for volatility-based stop loss calculation</li>
+                          <li>Trailing stops vs fixed stops - locking in profits as price moves in your favor</li>
+                          <li>Psychological aspects of stop placement - avoiding common pitfalls</li>
                         </ul>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Level 2: Technical Analysis */}
-              <div className="bg-accent/50 rounded-lg p-4 border border-accent">
-                <h3 className="font-medium text-lg flex items-center gap-2 mb-2">
+              <div className="bg-accent/50 rounded-lg p-6 border border-accent">
+                <h3 className="font-medium text-lg flex items-center gap-2 mb-4">
                   <LineChart className="h-5 w-5" />
                   Level 2: Technical Analysis
                 </h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-sm mb-2">1. Chart Patterns & Price Action</h4>
-                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                      <li>Support and Resistance
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Identifying key price levels</li>
-                          <li>Multiple timeframe analysis</li>
-                          <li>Dynamic vs static levels</li>
+                <div className="space-y-5 px-2">
+                  <div className="bg-background/50 p-4 rounded-md">
+                    <h4 className="font-medium text-base mb-3">1. Chart Patterns & Price Action</h4>
+                    <div className="space-y-4 pl-2">
+                      <div>
+                        <p className="font-medium mb-2">Support and Resistance Levels</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Identifying key price levels where buying or selling pressure has historically emerged</li>
+                          <li>Multiple timeframe analysis - confirming levels across different time horizons</li>
+                          <li>Dynamic vs static levels - understanding how support/resistance changes over time</li>
+                          <li>Trading the break vs trading the bounce - different strategies for key levels</li>
                         </ul>
-                      </li>
-                      <li>Common chart patterns
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Head and shoulders patterns</li>
-                          <li>Double tops and bottoms</li>
-                          <li>Triangle patterns and wedges</li>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">Common Chart Patterns</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Head and shoulders patterns - a reversal pattern with three peaks</li>
+                          <li>Double tops and bottoms - price testing a level twice before reversing</li>
+                          <li>Triangle patterns and wedges - consolidation patterns showing narrowing price range</li>
+                          <li>Flags and pennants - continuation patterns after strong price moves</li>
                         </ul>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-medium text-sm mb-2">2. Technical Indicators</h4>
-                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                      <li>Trend indicators
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Moving averages and crossovers</li>
-                          <li>MACD for trend confirmation</li>
-                          <li>ADX for trend strength</li>
+                  <div className="bg-background/50 p-4 rounded-md">
+                    <h4 className="font-medium text-base mb-3">2. Technical Indicators</h4>
+                    <div className="space-y-4 pl-2">
+                      <div>
+                        <p className="font-medium mb-2">Trend Indicators</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Moving averages and crossovers - identifying trend direction and potential reversals</li>
+                          <li>MACD (Moving Average Convergence Divergence) - for trend confirmation and momentum</li>
+                          <li>ADX (Average Directional Index) - measuring trend strength regardless of direction</li>
+                          <li>Parabolic SAR - for potential stop and reverse points in a trend</li>
                         </ul>
-                      </li>
-                      <li>Momentum indicators
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>RSI and stochastic oscillators</li>
-                          <li>Combining momentum with trend</li>
-                          <li>Divergence patterns</li>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">Momentum Indicators</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>RSI (Relative Strength Index) - identifying overbought/oversold conditions</li>
+                          <li>Stochastic oscillators - comparing closing price to price range over time</li>
+                          <li>Combining momentum with trend indicators for confirmation</li>
+                          <li>Divergence patterns - when price and indicators move in opposite directions</li>
                         </ul>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Level 3: Advanced Topics */}
-              <div className="bg-accent/50 rounded-lg p-4 border border-accent">
-                <h3 className="font-medium text-lg flex items-center gap-2 mb-2">
+              <div className="bg-accent/50 rounded-lg p-6 border border-accent">
+                <h3 className="font-medium text-lg flex items-center gap-2 mb-4">
                   <Activity className="h-5 w-5" />
                   Level 3: Advanced Trading
                 </h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-sm mb-2">1. Market Psychology</h4>
-                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                      <li>Understanding market cycles
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Fear and greed cycles</li>
-                          <li>Market sentiment indicators</li>
-                          <li>Volume analysis and trends</li>
+                <div className="space-y-5 px-2">
+                  <div className="bg-background/50 p-4 rounded-md">
+                    <h4 className="font-medium text-base mb-3">1. Market Psychology</h4>
+                    <div className="space-y-4 pl-2">
+                      <div>
+                        <p className="font-medium mb-2">Understanding Market Cycles</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Fear and greed cycles - how emotions drive market extremes</li>
+                          <li>Market sentiment indicators - using tools like the Fear & Greed Index</li>
+                          <li>Volume analysis - understanding how trading volume confirms or contradicts price moves</li>
+                          <li>Market phases - accumulation, markup, distribution, and markdown</li>
                         </ul>
-                      </li>
-                      <li>Trading psychology
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Emotional control in trading</li>
-                          <li>Building and following a plan</li>
-                          <li>Handling wins and losses</li>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">Trading Psychology</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Emotional control - managing fear, greed, and FOMO (Fear Of Missing Out)</li>
+                          <li>Building and following a trading plan consistently</li>
+                          <li>Handling wins and losses without emotional bias</li>
+                          <li>Journaling trades to improve decision-making over time</li>
                         </ul>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-medium text-sm mb-2">2. Strategy Development</h4>
-                    <ul className="list-disc pl-5 space-y-2 text-sm">
-                      <li>Creating a trading plan
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Defining entry and exit rules</li>
-                          <li>Position sizing strategy</li>
-                          <li>Risk management rules</li>
+                  <div className="bg-background/50 p-4 rounded-md">
+                    <h4 className="font-medium text-base mb-3">2. Strategy Development</h4>
+                    <div className="space-y-4 pl-2">
+                      <div>
+                        <p className="font-medium mb-2">Creating a Trading Plan</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Defining clear entry and exit rules based on your trading style</li>
+                          <li>Developing a position sizing strategy appropriate for your risk tolerance</li>
+                          <li>Establishing risk management rules for different market conditions</li>
+                          <li>Setting realistic profit targets and risk-reward ratios</li>
                         </ul>
-                      </li>
-                      <li>Backtesting and optimization
-                        <ul className="list-disc pl-5 mt-1 text-xs text-muted-foreground">
-                          <li>Historical performance analysis</li>
-                          <li>Parameter optimization</li>
-                          <li>Forward testing methods</li>
+                      </div>
+                      
+                      <div>
+                        <p className="font-medium mb-2">Backtesting and Optimization</p>
+                        <ul className="list-disc pl-6 space-y-2 text-sm">
+                          <li>Historical performance analysis - testing strategies against past market data</li>
+                          <li>Parameter optimization - finding the best settings for your strategy</li>
+                          <li>Forward testing methods - paper trading to validate backtest results</li>
+                          <li>Avoiding overfitting - ensuring strategies work in various market conditions</li>
                         </ul>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
