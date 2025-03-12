@@ -162,3 +162,42 @@ export interface BacktestResult {
   maxDrawdown: number;
   sharpeRatio: number;
 }
+
+// New risk management related types
+export interface RiskMetrics {
+  valueAtRisk: number;
+  maxDrawdown: number;
+  sharpeRatio: number;
+  volatility: number;
+  beta: number;
+  correlationMatrix?: Record<string, Record<string, number>>;
+}
+
+export interface PortfolioRisk {
+  totalValueAtRisk: number;
+  totalExposure: number;
+  netExposure: number;
+  grossExposure: number;
+  leverageRatio: number;
+  concentrationRisk: Record<string, number>;
+  assetClassRisk: Record<string, number>;
+}
+
+export interface RiskAlert {
+  id: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: 'exposure' | 'volatility' | 'drawdown' | 'correlation' | 'concentration';
+  message: string;
+  affectedStrategies: string[];
+  timestamp: Date;
+  isAcknowledged: boolean;
+}
+
+export interface RiskPreference {
+  maxDrawdown: number;
+  maxDailyLoss: number;
+  maxPositionSize: number;
+  maxLeverage: number;
+  maxConcentration: number;
+  riskToleranceLevel: 'conservative' | 'moderate' | 'aggressive';
+}
