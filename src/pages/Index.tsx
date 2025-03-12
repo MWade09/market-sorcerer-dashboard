@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,8 +17,9 @@ import TradingHistory from "@/components/TradingHistory";
 import UserGuide from "@/components/UserGuide";
 import RiskManagement from "@/components/RiskManagement";
 import TradingDisclaimer from "@/components/TradingDisclaimer";
-import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics } from "@/utils/mockData";
+import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics, chartData } from "@/utils/mockData";
 import { useAuth } from "@/context/AuthContext";
+import { MarketData } from "@/lib/types";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -30,6 +30,21 @@ const Index = () => {
 
   const toggleBotStatus = () => {
     setIsRunning(!isRunning);
+  };
+
+  const getMarketDataForDisplay = (): MarketData | null => {
+    if (!marketData || marketData.length === 0) return null;
+    
+    const crypto = marketData[0];
+    return {
+      price: crypto.price,
+      change24h: crypto.change24h,
+      volume24h: crypto.volume24h,
+      marketCap: crypto.marketCap,
+      high24h: crypto.price * 1.05,
+      low24h: crypto.price * 0.95,
+      lastUpdated: new Date().toISOString()
+    };
   };
 
   return (
@@ -117,7 +132,7 @@ const Index = () => {
           <TabsContent value="dashboard" className="mt-6">
             <Dashboard 
               isRunning={isRunning} 
-              marketData={marketData && marketData.length > 0 ? marketData[0] : null} 
+              marketData={getMarketDataForDisplay()} 
               isLoading={isLoading} 
             />
           </TabsContent>

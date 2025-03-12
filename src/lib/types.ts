@@ -1,3 +1,4 @@
+
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -7,14 +8,15 @@ export function cn(...inputs: ClassValue[]) {
 
 export type TimeFrame = '1m' | '5m' | '15m' | '1h' | '4h' | '1d' | '1w';
 
+// Updated MarketData type to be compatible with Cryptocurrency
 export interface MarketData {
   price: number;
   change24h: number;
-  high24h: number;
-  low24h: number;
+  high24h?: number;
+  low24h?: number;
   volume24h: number;
   marketCap: number;
-  lastUpdated: string;
+  lastUpdated?: string;
 }
 
 export interface Cryptocurrency {
