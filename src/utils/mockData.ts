@@ -412,3 +412,23 @@ export const generateCandlestickData = (days = 30, interval = 24): { time: numbe
 
 export const bitcoinChartData = generateCandlestickData();
 export const ethereumChartData = generateCandlestickData();
+
+// Add chart data for TradingViewChart
+export const chartData = [
+  { time: 1672531200, open: 16500, high: 16800, low: 16400, close: 16750, volume: 5600000, value: 16750 },
+  { time: 1672617600, open: 16750, high: 17100, low: 16700, close: 17050, volume: 6100000, value: 17050 },
+  { time: 1672704000, open: 17050, high: 17200, low: 16900, close: 17150, volume: 5800000, value: 17150 },
+  { time: 1672790400, open: 17150, high: 17300, low: 16800, close: 16900, volume: 6500000, value: 16900 },
+  { time: 1672876800, open: 16900, high: 17000, low: 16600, close: 16800, volume: 5900000, value: 16800 },
+  { time: 1672963200, open: 16800, high: 17200, low: 16750, close: 17100, volume: 6300000, value: 17100 },
+  { time: 1673049600, open: 17100, high: 17400, low: 17000, close: 17300, volume: 6700000, value: 17300 },
+  { time: 1673136000, open: 17300, high: 17500, low: 17200, close: 17450, volume: 7200000, value: 17450 },
+  { time: 1673222400, open: 17450, high: 17600, low: 17300, close: 17550, volume: 6800000, value: 17550 },
+  { time: 1673308800, open: 17550, high: 17800, low: 17500, close: 17750, volume: 7500000, value: 17750 },
+  { time: 1673395200, open: 17750, high: 18000, low: 17700, close: 17900, volume: 8100000, value: 17900 },
+  { time: 1673481600, open: 17900, high: 18200, low: 17800, close: 18100, volume: 8600000, value: 18100 },
+  { time: 1673568000, open: 18100, high: 18300, low: 18000, close: 18250, volume: 9200000, value: 18250 },
+  { time: 1673654400, open: 18250, high: 18400, low: 18100, close: 18350, volume: 8900000, value: 18350 },
+  { time: 1673740800, open: 18350, high: 18500, low: 18200, close: 18400, volume: 9500000, value: 18400 },
+  { time: 1673827200, open: 18400, high: 18600, low: 18300, close: 18500, volume: 9800000, value: 18500 },
+];

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricCard } from "@/components/MetricCard";
@@ -5,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import TradingViewChart from "@/components/TradingViewChart";
 import PerformanceMetrics from "@/components/PerformanceMetrics";
 import ActiveTrades from "@/components/ActiveTrades";
-import { performanceMetrics, activeTrades } from "@/utils/mockData";
+import { performanceMetrics, activeTrades, chartData } from "@/utils/mockData";
 import { MarketData } from "@/lib/types";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
@@ -70,7 +71,7 @@ const Dashboard = ({
               <CardDescription>Real-time price movements</CardDescription>
             </CardHeader>
             <CardContent>
-              <TradingViewChart symbol="BTCUSDT" />
+              <TradingViewChart symbol="BTCUSDT" data={chartData} />
             </CardContent>
           </Card>
         </div>
