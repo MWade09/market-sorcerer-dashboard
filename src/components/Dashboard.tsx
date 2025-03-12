@@ -1,126 +1,95 @@
-
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MetricCard } from "@/components/MetricCard";
+import { Separator } from "@/components/ui/separator";
 import TradingViewChart from "@/components/TradingViewChart";
 import PerformanceMetrics from "@/components/PerformanceMetrics";
-import { AlertTriangle, TrendingUp, Activity, Clock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { MarketData, PerformanceMetric, Cryptocurrency } from "@/lib/types";
-import TradeControls from "@/components/TradeControls";
-import MarketSignals from "@/components/MarketSignals";
-import RiskManagement from "@/components/RiskManagement";
-import { performanceMetrics, bitcoinChartData } from "@/utils/mockData";
+import ActiveTrades from "@/components/ActiveTrades";
+import { performanceMetrics, activeTrades } from "@/utils/mockData";
+import { MarketData } from "@/lib/types";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import { useMarketData } from "@/hooks/useMarketData";
 
-interface DashboardProps {
+// Add import for the new BotLearningInsights component
+import BotLearningInsights from "@/components/BotLearningInsights";
+
+const Dashboard = ({ 
+  isRunning, 
+  marketData, 
+  isLoading 
+}: {
   isRunning: boolean;
-  marketData: Cryptocurrency | null;
+  marketData: MarketData | null;
   isLoading: boolean;
-}
-
-const Dashboard = ({ isRunning, marketData, isLoading }: DashboardProps) => {
-  // Create a valid MarketData object from Cryptocurrency
-  const createMarketData = (crypto: Cryptocurrency | null): MarketData => {
-    if (!crypto) {
-      return {
-        price: 36789.45,
-        change24h: 2.54,
-        high24h: 38500.00,
-        low24h: 36300.00,
-        volume24h: 28765432000,
-        marketCap: 924567890000,
-        lastUpdated: new Date().toISOString()
-      };
-    }
-    
-    return {
-      price: crypto.price,
-      change24h: crypto.change24h,
-      high24h: crypto.price * 1.05, // Approximation
-      low24h: crypto.price * 0.95,  // Approximation
-      volume24h: crypto.volume24h,
-      marketCap: crypto.marketCap,
-      lastUpdated: new Date().toISOString()
-    };
-  };
-  
-  const marketDataFormatted = createMarketData(marketData);
+}) => {
+  const { refreshData } = useMarketData();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-      <div className="lg:col-span-2 space-y-4 md:space-y-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <div>
-              <CardTitle>BTC/USDT</CardTitle>
-              <CardDescription>
-                {isLoading ? (
-                  <Skeleton className="h-4 w-24" />
-                ) : (
-                  <span className="text-lg font-semibold text-green-500">
-                    ${marketDataFormatted.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                  </span>
-                )}
-              </CardDescription>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant={isRunning ? "default" : "secondary"}>
-                {isRunning ? "Active" : "Paused"}
-              </Badge>
-              <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-                <Clock className="mr-1 h-3 w-3" /> 5m
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <TradingViewChart symbol="BTC/USDT" data={bitcoinChartData} />
-          </CardContent>
-        </Card>
-
+    <div className="grid gap-6">
+      {/* First row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <MetricCard
+          label="Current Price"
+          value={marketData ? `$${marketData.price.toFixed(2)}` : "N/A"}
+          isLoading={isLoading}
+        />
+        <MetricCard
+          label="24h Change"
+          value={marketData ? `${marketData.change24h.toFixed(2)}%` : "N/A"}
+          change={marketData ? marketData.change24h : 0}
+          isLoading={isLoading}
+        />
         <Card>
           <CardHeader>
-            <CardTitle>Trade Settings</CardTitle>
-            <CardDescription>Configure your trading parameters</CardDescription>
+            <CardTitle>Refresh Data</CardTitle>
+            <CardDescription>Manually refresh market data</CardDescription>
           </CardHeader>
-          <CardContent>
-            <TradeControls />
+          <CardContent className="grid gap-4">
+            <Button variant="outline" disabled={isLoading} onClick={refreshData}>
+              {isLoading ? (
+                <>
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Refresh Data"
+              )}
+            </Button>
           </CardContent>
         </Card>
       </div>
-
-      <div className="space-y-4 md:space-y-6">
+      
+      {/* Second row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chart section - 2 columns wide on large screens */}
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Price Chart</CardTitle>
+              <CardDescription>Real-time price movements</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <TradingViewChart symbol="BTCUSDT" />
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* Bot Learning Insights - Add this new section */}
+        <div className="lg:col-span-1">
+          <BotLearningInsights isRunning={isRunning} />
+        </div>
+      </div>
+      
+      {/* Third row */}
+      <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Performance</CardTitle>
-            <CardDescription>Trading bot statistics</CardDescription>
+            <CardTitle>Performance Metrics</CardTitle>
+            <CardDescription>Key performance indicators for your bot</CardDescription>
           </CardHeader>
           <CardContent>
             <PerformanceMetrics metrics={performanceMetrics} />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity size={18} />
-              Market Signals
-            </CardTitle>
-            <CardDescription>Technical indicators</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <MarketSignals />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle size={18} />
-              Risk Management
-            </CardTitle>
-            <CardDescription>Stop-loss & take-profit</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <RiskManagement />
           </CardContent>
         </Card>
       </div>
