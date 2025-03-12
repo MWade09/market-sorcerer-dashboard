@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
@@ -20,13 +21,22 @@ import TradingDisclaimer from "@/components/TradingDisclaimer";
 import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics, chartData } from "@/utils/mockData";
 import { useAuth } from "@/context/AuthContext";
 import { MarketData } from "@/lib/types";
+import OnboardingTour from "@/components/OnboardingTour";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
   const { marketData, loading: isLoading, getChartData } = useMarketData();
   const [selectedTab, setSelectedTab] = useState("dashboard");
   const [settingsTab, setSettingsTab] = useState("exchanges");
-  const { user, logout } = useAuth();
+  const { user, logout, isFirstLogin, completeOnboarding } = useAuth();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Check for first login and show onboarding
+  useEffect(() => {
+    if (isFirstLogin) {
+      setShowOnboarding(true);
+    }
+  }, [isFirstLogin]);
 
   const toggleBotStatus = () => {
     setIsRunning(!isRunning);
@@ -45,6 +55,10 @@ const Index = () => {
       low24h: crypto.price * 0.95,
       lastUpdated: new Date().toISOString()
     };
+  };
+
+  const handleCompleteOnboarding = async () => {
+    await completeOnboarding();
   };
 
   return (
@@ -190,6 +204,14 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* Onboarding Tour */}
+      <OnboardingTour 
+        isOpen={showOnboarding}
+        onClose={() => setShowOnboarding(false)} 
+        onComplete={handleCompleteOnboarding}
+        setSelectedTab={setSelectedTab}
+      />
     </div>
   );
 };

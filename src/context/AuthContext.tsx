@@ -17,6 +17,7 @@ interface User {
   id: string;
   email: string;
   name?: string;
+  onboardingCompleted?: boolean;
 }
 
 interface AuthContextType {
@@ -28,6 +29,8 @@ interface AuthContextType {
   isLoading: boolean;
   showSupabaseConfigError: boolean;
   closeSupabaseConfigError: () => void;
+  completeOnboarding: () => Promise<void>;
+  isFirstLogin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -36,6 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSupabaseConfigError, setShowSupabaseConfigError] = useState(false);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -82,7 +86,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           id: data.session.user.id,
           email: data.session.user.email || '',
           name: data.session.user.user_metadata.name || '',
+          onboardingCompleted: data.session.user.user_metadata.onboardingCompleted || false,
         };
+        
+        // Set first login flag if onboarding hasn't been completed
+        setIsFirstLogin(!userData.onboardingCompleted);
         setUser(userData);
       }
       setIsLoading(false);
@@ -103,10 +111,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             id: session.user.id,
             email: session.user.email || '',
             name: session.user.user_metadata.name || '',
+            onboardingCompleted: session.user.user_metadata.onboardingCompleted || false,
           };
+          
+          // Set first login flag if onboarding hasn't been completed
+          setIsFirstLogin(!userData.onboardingCompleted);
           setUser(userData);
         } else {
           setUser(null);
+          setIsFirstLogin(false);
         }
         setIsLoading(false);
       }
@@ -116,6 +129,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       subscription.unsubscribe();
     };
   }, []);
+
+  const completeOnboarding = async (): Promise<void> => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: { 
+          onboardingCompleted: true 
+        }
+      });
+      
+      if (error) {
+        console.error("Error updating user metadata:", error);
+        return;
+      }
+      
+      // Update local user state
+      setUser({
+        ...user,
+        onboardingCompleted: true
+      });
+      
+      setIsFirstLogin(false);
+      
+    } catch (error) {
+      console.error("Error completing onboarding:", error);
+    }
+  };
 
   const signup = async (email: string, password: string, name: string): Promise<{success: boolean, error?: string}> => {
     setIsLoading(true);
@@ -194,7 +235,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout, 
         isLoading, 
         showSupabaseConfigError, 
-        closeSupabaseConfigError 
+        closeSupabaseConfigError,
+        completeOnboarding,
+        isFirstLogin
       }}
     >
       {children}
