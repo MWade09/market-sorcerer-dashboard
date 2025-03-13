@@ -14,7 +14,8 @@ import {
   Area,
   ComposedChart,
   Bar,
-  ReferenceLine
+  ReferenceLine,
+  Cell
 } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
@@ -128,6 +129,10 @@ const StrategyPerformanceChart: React.FC<StrategyPerformanceChartProps> = ({
   };
   
   const monthlyReturnsData = generateMonthlyReturns();
+  
+  // Set up colors for positive and negative returns
+  const positiveColor = "#4CAF50";
+  const negativeColor = "#F44336";
   
   // Calculate drawdown data
   const calculateDrawdown = () => {
@@ -341,8 +346,12 @@ const StrategyPerformanceChart: React.FC<StrategyPerformanceChartProps> = ({
                 <Bar 
                   dataKey="return" 
                   name="Monthly Return"
-                  fill={(entry) => entry.return >= 0 ? "#4CAF50" : "#F44336"}
-                />
+                  fill={positiveColor} // Default color
+                >
+                  {monthlyReturnsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.return >= 0 ? positiveColor : negativeColor} />
+                  ))}
+                </Bar>
               </ComposedChart>
             </ResponsiveContainer>
           )}

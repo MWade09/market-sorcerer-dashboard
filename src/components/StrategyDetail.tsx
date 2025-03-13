@@ -1,546 +1,407 @@
-
-import React, { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from "@/components/ui/tabs";
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer, 
-  AreaChart, 
-  Area, 
-  BarChart, 
-  Bar
-} from 'recharts';
-import { TradingStrategy, BacktestResult, TradeHistory } from '@/lib/types';
-import { cn } from '@/lib/utils';
-import { Button } from "./ui/button";
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Separator } from "./ui/separator";
-import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { MoreVertical, ArrowLeft, CircleDollarSign, LineChart as LineChartIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
 import { Label } from "./ui/label";
-import { 
-  Play, 
-  Pause, 
-  BarChart as BarChartIcon, 
-  Settings, 
-  Save, 
-  AlertCircle, 
-  ChevronRight, 
-  ChevronLeft
-} from "lucide-react";
-import { toast } from "@/components/ui/sonner";
-import BacktestSettings from "./BacktestSettings";
-import StrategyBacktestResults from "./StrategyBacktestResults";
+import { Input } from "./ui/input";
+import { Switch } from "./ui/switch";
+import { Slider } from "./ui/slider";
+import { Textarea } from "./ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Calendar } from "./ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./ui/popover"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandSeparator,
+} from "./ui/command"
+import { CalendarIcon } from "@radix-ui/react-icons"
+import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  ReferenceLine,
+  Cell
+} from 'recharts';
 
 interface StrategyDetailProps {
-  strategy: TradingStrategy;
-  backtestData?: BacktestResult;
-  tradeHistory?: TradeHistory[];
-  onBack?: () => void;
-  onSave?: (strategy: TradingStrategy) => void;
-  onRunBacktest?: (strategy: TradingStrategy, settings: any) => Promise<BacktestResult>;
+  strategyId: string;
+  onBack: () => void;
 }
 
-const StrategyDetail: React.FC<StrategyDetailProps> = ({
-  strategy,
-  backtestData,
-  tradeHistory,
-  onBack,
-  onSave,
-  onRunBacktest
-}) => {
-  const [currentStrategy, setCurrentStrategy] = useState<TradingStrategy>({...strategy});
-  const [isBacktesting, setIsBacktesting] = useState(false);
-  const [backtestResults, setBacktestResults] = useState<BacktestResult | undefined>(backtestData);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [backtestSettings, setBacktestSettings] = useState({
-    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-    endDate: new Date(),
-    initialCapital: 10000,
-    useStopLoss: currentStrategy.advancedParams?.useStopLoss || false,
-    stopLossPercentage: currentStrategy.advancedParams?.stopLossPercentage || 5,
-    useTakeProfit: currentStrategy.advancedParams?.useTakeProfit || false,
-    takeProfitPercentage: currentStrategy.advancedParams?.takeProfitPercentage || 10,
-  });
-  
-  // Generate mock equity curve data for visualization
-  const generateEquityCurveData = () => {
-    if (!backtestResults) return [];
-    
-    const days = 30;
-    const startValue = 10000;
-    const endValue = startValue * (1 + backtestResults.totalReturn / 100);
-    
-    // Generate a somewhat realistic equity curve
-    const data = [];
-    let currentValue = startValue;
-    for (let i = 0; i <= days; i++) {
-      // Add some randomness to make it look realistic
-      const randomFactor = 1 + (Math.random() * 0.02 - 0.01);
-      
-      // Gradually move towards the end value
-      const progressFactor = i / days;
-      const targetValue = startValue + (endValue - startValue) * progressFactor;
-      
-      // Apply some mean reversion to the random walk
-      currentValue = currentValue * 0.9 + targetValue * 0.1 * randomFactor;
-      
-      const date = new Date();
-      date.setDate(date.getDate() - (days - i));
-      
-      data.push({
-        date: date.toISOString().split('T')[0],
-        value: currentValue.toFixed(2),
-      });
-    }
-    
-    return data;
-  };
-  
-  const equityCurveData = generateEquityCurveData();
-  
-  // Generate mock monthly returns data
-  const generateMonthlyReturnsData = () => {
-    if (!backtestResults) return [];
-    
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    return months.map(month => {
-      // Generate realistic looking returns based on overall performance
-      const baseReturn = backtestResults.totalReturn / 12;
-      const randomFactor = Math.random() * 2 - 1; // Between -1 and 1
-      const monthReturn = baseReturn + randomFactor * (Math.abs(baseReturn) / 2);
-      
+const StrategyDetail: React.FC<StrategyDetailProps> = ({ strategyId, onBack }) => {
+  const [loading, setLoading] = React.useState(true);
+  const [strategy, setStrategy] = React.useState<any>(null);
+  const [tradingPair, setTradingPair] = React.useState('BTC/USD');
+  const [isStrategyActive, setIsStrategyActive] = React.useState(true);
+
+  React.useEffect(() => {
+    // Mock API call to fetch strategy details
+    setTimeout(() => {
+      const mockStrategy = {
+        id: strategyId,
+        name: "Momentum Master",
+        description: "A strategy that capitalizes on short-term price momentum.",
+        riskLevel: "medium",
+        timeframe: "15m",
+        indicators: ["RSI", "MACD"],
+        type: "momentum",
+        isActive: true,
+        config: {
+          RSI_Overbought: 70,
+          RSI_Oversold: 30,
+          MACD_FastLength: 12,
+          MACD_SlowLength: 26,
+        },
+        advancedParams: {
+          positionSize: 0.02,
+          allowPyramiding: false,
+          useStopLoss: true,
+          stopLossPercentage: 2,
+          useTakeProfit: true,
+          takeProfitPercentage: 5,
+        },
+        backtestResults: {
+          totalReturn: 35.2,
+          maxDrawdown: -12.5,
+          sharpeRatio: 1.8,
+          winRate: 62.5,
+          profitFactor: 2.1,
+        },
+      };
+
+      setStrategy(mockStrategy);
+      setLoading(false);
+    }, 500);
+  }, [strategyId]);
+
+  // Performance metrics data
+  const performanceMetrics = [
+    { label: "Total Return", value: "35.2%", change: 1.2, info: "Total percentage gain" },
+    { label: "Max Drawdown", value: "-12.5%", change: -0.5, info: "Maximum loss from peak to trough" },
+    { label: "Sharpe Ratio", value: "1.8", change: 0.1, info: "Risk-adjusted return" },
+    { label: "Win Rate", value: "62.5%", change: 0.8, info: "Percentage of winning trades" },
+    { label: "Profit Factor", value: "2.1", change: 0.2, info: "Ratio of gross profit to gross loss" },
+  ];
+
+  // Strategy parameters data
+  const strategyParameters = [
+    { label: "Risk Level", value: strategy?.riskLevel || "Medium" },
+    { label: "Timeframe", value: strategy?.timeframe || "15m" },
+    { label: "Indicators", value: strategy?.indicators?.join(", ") || "RSI, MACD" },
+    { label: "Position Size", value: strategy?.advancedParams?.positionSize || "0.02" },
+    { label: "Stop Loss", value: strategy?.advancedParams?.stopLossPercentage ? `${strategy?.advancedParams?.stopLossPercentage}%` : "Disabled" },
+    { label: "Take Profit", value: strategy?.advancedParams?.takeProfitPercentage ? `${strategy?.advancedParams?.takeProfitPercentage}%` : "Disabled" },
+  ];
+
+  // Performance data with random returns
+  const performanceData = React.useMemo(() => {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30); // Go back 30 days
+
+    return Array.from({ length: 30 }, (_, i) => {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      const baseValue = 10000; // Starting equity
+      const dailyReturn = Math.random() * 0.02 - 0.01; // Random return between -1% and 1%
+      const value = baseValue * (1 + dailyReturn * (i + 1));
+
       return {
-        month,
-        return: monthReturn.toFixed(2)
+        date: date.toISOString().split('T')[0],
+        value: parseFloat(value.toFixed(2)),
       };
     });
+  }, []);
+
+  // Monthly returns data
+  const monthlyReturnsData = React.useMemo(() => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    return months.map(month => {
+      const returnValue = Math.random() * 8 - 4; // Random return between -4% and 4%
+      return {
+        month,
+        return: parseFloat(returnValue.toFixed(2)),
+      };
+    });
+  }, []);
+
+  // Monthly returns colors for custom rendering
+  const positiveColor = "#4ade80"; // green-400
+  const negativeColor = "#f87171"; // red-400
+
+  const getTradingPair = () => {
+    // Mock function to fetch trading pair
+    return `${Math.random() > 0.5 ? 'BTC/USD' : 'ETH/USD'}`;
   };
-  
-  const monthlyReturnsData = generateMonthlyReturnsData();
-  
-  // Handle running a backtest
-  const handleRunBacktest = async () => {
-    if (!onRunBacktest) return;
-    
-    setIsBacktesting(true);
-    try {
-      const results = await onRunBacktest(currentStrategy, backtestSettings);
-      setBacktestResults(results);
-      setActiveTab('results');
-      toast.success("Backtest completed successfully");
-    } catch (error) {
-      console.error("Backtest error:", error);
-      toast.error("Failed to run backtest");
-    } finally {
-      setIsBacktesting(false);
-    }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
-  
-  // Handle saving strategy changes
-  const handleSaveStrategy = () => {
-    if (onSave) {
-      onSave(currentStrategy);
-      toast.success("Strategy saved successfully");
-    }
+
+  const handleStrategyActionToggle = () => {
+    setIsStrategyActive(!isStrategyActive);
   };
-  
+
+  if (loading) {
+    return <div>Loading strategy details...</div>;
+  }
+
+  if (!strategy) {
+    return <div>Strategy not found.</div>;
+  }
+
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {onBack && (
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={onBack}
-              className="gap-1"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              Back
-            </Button>
-          )}
-          <h2 className="text-2xl font-bold">{strategy.name}</h2>
-          <Badge variant={strategy.isActive ? "default" : "outline"}>
-            {strategy.isActive ? "Active" : "Inactive"}
-          </Badge>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            onClick={handleSaveStrategy}
-            className="gap-1"
-          >
-            <Save className="h-4 w-4" />
-            Save
+        <div className="flex items-center">
+          <Button variant="ghost" onClick={onBack} className="mr-2">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
           </Button>
-          {!isBacktesting ? (
-            <Button 
-              onClick={handleRunBacktest}
-              className="gap-1"
-            >
-              <Play className="h-4 w-4" />
-              Run Backtest
-            </Button>
-          ) : (
-            <Button disabled className="gap-1">
-              <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
-              Running...
-            </Button>
-          )}
+          <CardTitle>{strategy.name}</CardTitle>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleStrategyActionToggle}>
+              {isStrategyActive ? "Deactivate" : "Activate"}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem>Duplicate</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-      
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-          <TabsTrigger value="backtest">Backtest</TabsTrigger>
-          <TabsTrigger value="results" disabled={!backtestResults}>Results</TabsTrigger>
+
+      {/* Strategy Overview Section */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Description</CardTitle>
+            <CardDescription>Strategy overview and objectives</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>{strategy.description}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Risk Assessment</CardTitle>
+            <CardDescription>Potential risks and drawdowns</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Badge variant="secondary">{strategy.riskLevel}</Badge>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Trading Pair</CardTitle>
+            <CardDescription>Currently active pair</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-4">
+              <CircleDollarSign className="h-4 w-4 text-green-500" />
+              <div>{getTradingPair()}</div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Tabs defaultValue="performance" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="performance">Performance</TabsTrigger>
+          <TabsTrigger value="parameters">Parameters</TabsTrigger>
+          <TabsTrigger value="backtests">Backtests</TabsTrigger>
+          <TabsTrigger value="trades">Trades</TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="overview" className="space-y-4 mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        {/* Performance Tab */}
+        <TabsContent value="performance" className="space-y-6">
+          {/* Performance Metrics */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Performance Metrics</CardTitle>
+              <CardDescription>Key performance indicators for this strategy</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {performanceMetrics.map((metric) => (
+                  <div key={metric.label} className="space-y-1">
+                    <p className="text-sm font-medium">{metric.label}</p>
+                    <p className="text-2xl font-bold">{metric.value}</p>
+                    <p className="text-sm text-muted-foreground">{metric.info}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Equity Curve & Drawdown */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Equity Curve */}
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Strategy Type</CardTitle>
+                <CardTitle>Equity Curve</CardTitle>
+                <CardDescription>Strategy performance over time</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-semibold capitalize">
-                  {strategy.type.replace('_', ' ')}
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={performanceData}>
+                      <defs>
+                        <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" tickFormatter={formatDate} />
+                      <YAxis />
+                      <Tooltip formatter={(value) => [`$${value}`, 'Equity']} labelFormatter={formatDate} />
+                      <Area type="monotone" dataKey="value" stroke="#8884d8" fillOpacity={1} fill="url(#colorValue)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">{strategy.description}</p>
               </CardContent>
             </Card>
-            
+
+            {/* Monthly Returns */}
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Risk Level</CardTitle>
+                <CardTitle>Monthly Returns</CardTitle>
+                <CardDescription>Performance breakdown by month</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className={cn(
-                  "text-2xl font-semibold capitalize",
-                  strategy.riskLevel === "low" ? "text-green-500" :
-                  strategy.riskLevel === "medium" ? "text-amber-500" : 
-                  "text-red-500"
-                )}>
-                  {strategy.riskLevel}
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={monthlyReturnsData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis tickFormatter={(value) => `${value}%`} />
+                      <Tooltip formatter={(value) => [`${value}%`, 'Return']} />
+                      <ReferenceLine y={0} stroke="#888888" />
+                      <Bar
+                        dataKey="return"
+                        name="Monthly Return"
+                        fill={positiveColor} // Default color, will be overridden by Cell components
+                      >
+                        {monthlyReturnsData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.return >= 0 ? positiveColor : negativeColor} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  {strategy.riskLevel === "low" ? "Conservative approach with minimal drawdowns" :
-                  strategy.riskLevel === "medium" ? "Balanced risk-reward profile" : 
-                  "Aggressive approach for maximum returns"}
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Trading Pair</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-semibold">
-                  {strategy.config.asset || "BTC/USDT"}
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Timeframe: {strategy.timeframe || strategy.config.timeframe || "1h"}
-                </p>
               </CardContent>
             </Card>
           </div>
-          
-          {backtestResults && (
-            <>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Performance Overview</CardTitle>
-                  <CardDescription>Equity curve based on backtest results</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={equityCurveData}>
-                        <defs>
-                          <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-                          </linearGradient>
-                        </defs>
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <Tooltip />
-                        <Area type="monotone" dataKey="value" stroke="#8884d8" fillOpacity={1} fill="url(#colorValue)" />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Monthly Returns</CardTitle>
-                    <CardDescription>Performance breakdown by month</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-80">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={monthlyReturnsData}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="month" />
-                          <YAxis />
-                          <Tooltip />
-                          <Bar 
-                            dataKey="return" 
-                            fill={(entry) => parseFloat(entry.return) >= 0 ? "#4ade80" : "#f87171"}
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Key Metrics</CardTitle>
-                    <CardDescription>Performance statistics</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-muted-foreground">Total Return</p>
-                          <p className={cn(
-                            "text-2xl font-medium",
-                            backtestResults.totalReturn >= 0 ? "text-green-500" : "text-red-500"
-                          )}>
-                            {backtestResults.totalReturn}%
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Win Rate</p>
-                          <p className="text-2xl font-medium">{backtestResults.winRate}%</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Profit Factor</p>
-                          <p className="text-2xl font-medium">{backtestResults.profitFactor.toFixed(2)}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Sharpe Ratio</p>
-                          <p className="text-2xl font-medium">{backtestResults.sharpeRatio.toFixed(2)}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Max Drawdown</p>
-                          <p className="text-2xl font-medium text-red-500">{backtestResults.maxDrawdown}%</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Total Trades</p>
-                          <p className="text-2xl font-medium">{backtestResults.trades}</p>
-                        </div>
-                      </div>
-                      
-                      {backtestResults.maxDrawdown > 20 && (
-                        <div className="flex items-center gap-2 p-3 bg-red-50 text-red-700 rounded-md">
-                          <AlertCircle className="h-5 w-5" />
-                          <p className="text-sm">High drawdown detected. Consider adjusting risk parameters.</p>
-                        </div>
-                      )}
-                      
-                      {backtestResults.profitFactor < 1.2 && backtestResults.profitFactor > 0 && (
-                        <div className="flex items-center gap-2 p-3 bg-amber-50 text-amber-700 rounded-md">
-                          <AlertCircle className="h-5 w-5" />
-                          <p className="text-sm">Low profit factor. Strategy may not be robust enough.</p>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </>
-          )}
-        </TabsContent>
-        
-        <TabsContent value="settings" className="space-y-6 mt-4">
+
+          {/* Additional Analysis */}
           <Card>
             <CardHeader>
-              <CardTitle>Basic Settings</CardTitle>
-              <CardDescription>Configure the core parameters for this strategy</CardDescription>
+              <CardTitle>Additional Analysis</CardTitle>
+              <CardDescription>Further insights and recommendations</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="strategy-name">Strategy Name</Label>
-                <Input 
-                  id="strategy-name" 
-                  value={currentStrategy.name}
-                  onChange={(e) => setCurrentStrategy({...currentStrategy, name: e.target.value})}
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="strategy-description">Description</Label>
-                <Input 
-                  id="strategy-description" 
-                  value={currentStrategy.description}
-                  onChange={(e) => setCurrentStrategy({...currentStrategy, description: e.target.value})}
-                />
-              </div>
-              
-              {/* Render strategy-specific settings based on type */}
-              {currentStrategy.type === "momentum" && (
-                <>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="rsi-period">RSI Period</Label>
-                      <Input 
-                        id="rsi-period" 
-                        type="number"
-                        value={currentStrategy.config.rsiPeriod}
-                        onChange={(e) => setCurrentStrategy({
-                          ...currentStrategy, 
-                          config: {...currentStrategy.config, rsiPeriod: parseInt(e.target.value)}
-                        })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="rsi-overbought">Overbought Level</Label>
-                      <Input 
-                        id="rsi-overbought" 
-                        type="number"
-                        value={currentStrategy.config.overbought}
-                        onChange={(e) => setCurrentStrategy({
-                          ...currentStrategy, 
-                          config: {...currentStrategy.config, overbought: parseInt(e.target.value)}
-                        })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="rsi-oversold">Oversold Level</Label>
-                      <Input 
-                        id="rsi-oversold" 
-                        type="number"
-                        value={currentStrategy.config.oversold}
-                        onChange={(e) => setCurrentStrategy({
-                          ...currentStrategy, 
-                          config: {...currentStrategy.config, oversold: parseInt(e.target.value)}
-                        })}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-              
-              {currentStrategy.type === "trend_following" && (
-                <>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="fast-ma">Fast MA Period</Label>
-                      <Input 
-                        id="fast-ma" 
-                        type="number"
-                        value={currentStrategy.config.fastMA}
-                        onChange={(e) => setCurrentStrategy({
-                          ...currentStrategy, 
-                          config: {...currentStrategy.config, fastMA: parseInt(e.target.value)}
-                        })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="slow-ma">Slow MA Period</Label>
-                      <Input 
-                        id="slow-ma" 
-                        type="number"
-                        value={currentStrategy.config.slowMA}
-                        onChange={(e) => setCurrentStrategy({
-                          ...currentStrategy, 
-                          config: {...currentStrategy.config, slowMA: parseInt(e.target.value)}
-                        })}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>Advanced Settings</CardTitle>
-              <CardDescription>Configure risk management and execution parameters</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* The advanced parameters would be rendered here based on the strategy type */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="position-size">Position Size (%)</Label>
-                  <Input 
-                    id="position-size" 
-                    type="number"
-                    value={currentStrategy.advancedParams?.positionSize || 5}
-                    onChange={(e) => {
-                      const positionSize = parseInt(e.target.value);
-                      setCurrentStrategy({
-                        ...currentStrategy,
-                        advancedParams: {
-                          ...currentStrategy.advancedParams,
-                          positionSize
-                        }
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="backtest" className="mt-4">
-          <BacktestSettings 
-            settings={backtestSettings}
-            onChange={setBacktestSettings}
-            onRun={handleRunBacktest}
-            isRunning={isBacktesting}
-          />
-        </TabsContent>
-        
-        <TabsContent value="results" className="mt-4">
-          {backtestResults ? (
-            <StrategyBacktestResults results={backtestResults} />
-          ) : (
-            <div className="flex flex-col items-center justify-center p-10 border border-dashed rounded-lg text-center">
-              <BarChartIcon className="h-10 w-10 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No Backtest Results</h3>
-              <p className="text-muted-foreground mt-2 max-w-md">
-                Run a backtest to see detailed performance metrics and analysis for your strategy.
+            <CardContent>
+              <p>
+                Based on the current performance metrics, this strategy shows a
+                promising total return with a manageable max drawdown. The Sharpe
+                Ratio indicates good risk-adjusted returns.
               </p>
-              <Button 
-                className="mt-4" 
-                onClick={() => setActiveTab('backtest')}
-              >
-                Go to Backtest
-              </Button>
-            </div>
-          )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Parameters Tab */}
+        <TabsContent value="parameters" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Strategy Parameters</CardTitle>
+              <CardDescription>Configuration settings for this strategy</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {strategyParameters.map((param) => (
+                  <div key={param.label} className="space-y-1">
+                    <p className="text-sm font-medium">{param.label}</p>
+                    <p className="text-lg">{param.value}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Backtests Tab */}
+        <TabsContent value="backtests" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Backtests</CardTitle>
+              <CardDescription>Historical performance analysis</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>
+                Backtesting results will be displayed here.
+              </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Trades Tab */}
+        <TabsContent value="trades" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Trades</CardTitle>
+              <CardDescription>List of executed trades</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>
+                Trade history will be displayed here.
+              </p>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Additional UI elements */}
     </div>
   );
 };

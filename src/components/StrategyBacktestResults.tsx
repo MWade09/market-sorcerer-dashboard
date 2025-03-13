@@ -16,7 +16,8 @@ import {
   Bar,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  ReferenceLine
 } from 'recharts';
 import { BacktestResult } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -120,6 +121,15 @@ const StrategyBacktestResults: React.FC<StrategyBacktestResultsProps> = ({ resul
   const tradeDistributionData = generateTradeDistributionData();
   const monthlyReturnsData = generateMonthlyReturnsData();
   const drawdownData = generateDrawdownData();
+  
+  // Add custom colors for positive and negative returns
+  const positiveColor = "#4CAF50";
+  const negativeColor = "#F44336";
+  
+  // Add a color array for each data point in monthlyReturnsData
+  const barColors = monthlyReturnsData.map(entry => 
+    entry.return >= 0 ? positiveColor : negativeColor
+  );
   
   const COLORS = ['#4CAF50', '#F44336'];
   
@@ -279,8 +289,12 @@ const StrategyBacktestResults: React.FC<StrategyBacktestResultsProps> = ({ resul
                   <Bar 
                     dataKey="return" 
                     name="Monthly Return"
-                    fill={(entry) => entry.return >= 0 ? "#4CAF50" : "#F44336"}
-                  />
+                    fill={positiveColor} // Set a default color
+                  >
+                    {monthlyReturnsData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.return >= 0 ? positiveColor : negativeColor} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
