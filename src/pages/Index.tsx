@@ -9,7 +9,7 @@ import ActiveTrades from "@/components/ActiveTrades";
 import ExchangeSelector from "@/components/ExchangeSelector";
 import StrategySelector from "@/components/StrategySelector";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Settings, History, ChevronDown, Book, Cog, LogOut, User } from "lucide-react";
+import { Play, Pause, Settings, History, ChevronDown, Book, Cog, LogOut, User, BarChart4 } from "lucide-react";
 import { useMarketData } from "@/hooks/useMarketData";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs as SettingsTabs, TabsContent as SettingsTabsContent, TabsList as SettingsTabsList, TabsTrigger as SettingsTabsTrigger } from "@/components/ui/tabs";
@@ -22,6 +22,7 @@ import { exchangeAccounts, tradingStrategies, activeTrades, performanceMetrics, 
 import { useAuth } from "@/context/AuthContext";
 import { MarketData } from "@/lib/types";
 import OnboardingTour from "@/components/OnboardingTour";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -80,6 +81,13 @@ const Index = () => {
               {isRunning ? <Pause size={16} /> : <Play size={16} />}
               {isRunning ? "Stop Bot" : "Start Bot"}
             </Button>
+            
+            <Link to="/portfolio-optimization">
+              <Button variant="outline" className="gap-2">
+                <BarChart4 size={16} />
+                Portfolio Optimization
+              </Button>
+            </Link>
             
             <Dialog>
               <DialogTrigger asChild>

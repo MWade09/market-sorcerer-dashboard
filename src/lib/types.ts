@@ -201,3 +201,45 @@ export interface RiskPreference {
   maxConcentration: number;
   riskToleranceLevel: 'conservative' | 'moderate' | 'aggressive';
 }
+
+// New Portfolio Optimization types
+export interface PortfolioAsset {
+  id: string;
+  symbol: string;
+  name: string;
+  allocation: number;
+  expectedReturn: number;
+  volatility: number;
+  weight: number;
+  price: number;
+  quantity: number;
+}
+
+export interface PortfolioAllocation {
+  assets: PortfolioAsset[];
+  expectedReturn: number;
+  volatility: number;
+  sharpeRatio: number;
+  maxDrawdown: number;
+  riskLevel: 'low' | 'moderate' | 'high';
+}
+
+export interface OptimizationConstraint {
+  minAllocation?: number;
+  maxAllocation?: number;
+  assetClassLimits?: Record<string, number>;
+  includedAssets?: string[];
+  excludedAssets?: string[];
+}
+
+export interface OptimizationPreference {
+  riskTolerance: 'low' | 'moderate' | 'high';
+  optimizationGoal: 'sharpe' | 'return' | 'risk';
+  constraints: OptimizationConstraint;
+}
+
+export interface CorrelationData {
+  assetA: string;
+  assetB: string;
+  correlation: number;
+}

@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
+import PortfolioOptimization from "./pages/PortfolioOptimization";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +45,11 @@ const AppRoutes = () => {
         <Route path="/" element={
           <ProtectedRoute>
             <Index />
+          </ProtectedRoute>
+        } />
+        <Route path="/portfolio-optimization" element={
+          <ProtectedRoute>
+            <PortfolioOptimization />
           </ProtectedRoute>
         } />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
