@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Card,
@@ -35,7 +34,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { OptimizationPreference, PortfolioAsset } from '@/lib/types';
-import { AdjustmentsHorizontalIcon, ChevronDownIcon } from 'lucide-react';
+import { SlidersHorizontal, ChevronDown } from 'lucide-react';
 
 const formSchema = z.object({
   riskTolerance: z.enum(['low', 'moderate', 'high']),
@@ -193,9 +192,9 @@ const OptimizationForm: React.FC<OptimizationFormProps> = ({
                 className="flex items-center gap-1 mb-4"
                 onClick={() => setShowAdvanced(!showAdvanced)}
               >
-                <AdjustmentsHorizontalIcon className="h-4 w-4" />
+                <SlidersHorizontal className="h-4 w-4" />
                 Advanced Options
-                <ChevronDownIcon className={`h-4 w-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-4 w-4 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
               </Button>
               
               {showAdvanced && (
@@ -287,3 +286,4 @@ const OptimizationForm: React.FC<OptimizationFormProps> = ({
 };
 
 export default OptimizationForm;
+
