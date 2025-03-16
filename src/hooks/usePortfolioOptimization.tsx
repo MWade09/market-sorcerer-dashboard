@@ -21,17 +21,17 @@ export const usePortfolioOptimization = () => {
     optimizePortfolio 
   } = useOptimizationProcess(assets);
   
-  // Define vibrant color scheme for charts
+  // Define vibrant color scheme for charts with high contrast against dark background
   const chartColors = [
-    '#8B5CF6', // Purple (primary)
-    '#3B82F6', // Blue
-    '#10B981', // Green
-    '#F97316', // Orange
-    '#EC4899', // Pink
-    '#06B6D4', // Cyan
-    '#F59E0B', // Amber
-    '#6366F1', // Indigo
-    '#D946EF'  // Magenta
+    '#b084fc', // Bright purple (primary)
+    '#60a5fa', // Bright blue
+    '#4ade80', // Bright green
+    '#fb923c', // Bright orange
+    '#f472b6', // Bright pink
+    '#22d3ee', // Bright cyan
+    '#fbbf24', // Bright amber
+    '#818cf8', // Bright indigo
+    '#e879f9'  // Bright magenta
   ];
   
   return {

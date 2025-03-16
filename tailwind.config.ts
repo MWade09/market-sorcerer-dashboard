@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -109,6 +108,18 @@ export default {
 				'glow': {
 					'0%, 100%': { boxShadow: '0 0 10px rgba(120, 119, 198, 0.5)' },
 					'50%': { boxShadow: '0 0 20px rgba(120, 119, 198, 0.8)' }
+				},
+				'glow-white': {
+					'0%, 100%': { boxShadow: '0 0 10px rgba(255, 255, 255, 0.5)' },
+					'50%': { boxShadow: '0 0 20px rgba(255, 255, 255, 0.8)' }
+				},
+				'glow-purple': {
+					'0%, 100%': { boxShadow: '0 0 10px rgba(150, 120, 255, 0.5)' },
+					'50%': { boxShadow: '0 0 20px rgba(150, 120, 255, 0.8)' }
+				},
+				'pop-scale': {
+					'0%': { transform: 'scale(1)' },
+					'100%': { transform: 'scale(1.05)' }
 				}
 			},
 			animation: {
@@ -121,7 +132,10 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 				'scale-out': 'scale-out 0.2s ease-out',
 				'progress-fill': 'progress-fill 2s ease-out forwards',
-				'glow': 'glow 2s ease-in-out infinite'
+				'glow': 'glow 2s ease-in-out infinite',
+				'glow-white': 'glow-white 2s ease-in-out infinite',
+				'glow-purple': 'glow-purple 2s ease-in-out infinite',
+				'pop-scale': 'pop-scale 0.2s ease-out forwards'
 			},
 			fontFamily: {
 				sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -131,7 +145,9 @@ export default {
 				'soft': '0 2px 10px rgba(0, 0, 0, 0.05)',
 				'medium': '0 4px 20px rgba(0, 0, 0, 0.08)',
 				'glass': '0 8px 32px rgba(31, 38, 135, 0.07)',
-				'glow': '0 0 15px rgba(120, 119, 198, 0.7)'
+				'glow': '0 0 15px rgba(120, 119, 198, 0.7)',
+				'white-glow': '0 0 15px rgba(255, 255, 255, 0.7)',
+				'purple-glow': '0 0 15px rgba(150, 120, 255, 0.7)'
 			},
 			backdropBlur: {
 				'xs': '2px',
