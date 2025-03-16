@@ -105,6 +105,10 @@ export default {
 				'progress-fill': {
 					from: { width: '0%' },
 					to: { width: 'var(--progress-value)' }
+				},
+				'glow': {
+					'0%, 100%': { boxShadow: '0 0 10px rgba(120, 119, 198, 0.5)' },
+					'50%': { boxShadow: '0 0 20px rgba(120, 119, 198, 0.8)' }
 				}
 			},
 			animation: {
@@ -116,7 +120,8 @@ export default {
 				'slide-out': 'slide-out 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'scale-out': 'scale-out 0.2s ease-out',
-				'progress-fill': 'progress-fill 2s ease-out forwards'
+				'progress-fill': 'progress-fill 2s ease-out forwards',
+				'glow': 'glow 2s ease-in-out infinite'
 			},
 			fontFamily: {
 				sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -125,10 +130,15 @@ export default {
 			boxShadow: {
 				'soft': '0 2px 10px rgba(0, 0, 0, 0.05)',
 				'medium': '0 4px 20px rgba(0, 0, 0, 0.08)',
-				'glass': '0 8px 32px rgba(31, 38, 135, 0.07)'
+				'glass': '0 8px 32px rgba(31, 38, 135, 0.07)',
+				'glow': '0 0 15px rgba(120, 119, 198, 0.7)'
 			},
 			backdropBlur: {
 				'xs': '2px',
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-stops))',
+				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
 			}
 		}
 	},

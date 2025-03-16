@@ -20,10 +20,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em rgba(138, 75, 255, 0.8));
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em rgba(138, 75, 255, 0.8));
 }
 
 @keyframes logo-spin {
@@ -35,6 +35,19 @@
   }
 }
 
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 10px rgba(138, 75, 255, 0.5);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(138, 75, 255, 0.8);
+  }
+}
+
+.pulse-effect {
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -43,6 +56,12 @@
 
 .card {
   padding: 2em;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .read-the-docs {
@@ -59,4 +78,23 @@
   body {
     font-size: 14px;
   }
+}
+
+/* Enhanced visual elements */
+.gradient-background {
+  background: linear-gradient(135deg, rgba(250, 250, 255, 0.8) 0%, rgba(240, 238, 255, 0.8) 100%);
+}
+
+.dark .gradient-background {
+  background: linear-gradient(135deg, rgba(30, 30, 45, 0.8) 0%, rgba(25, 25, 35, 0.8) 100%);
+}
+
+.glowing-border {
+  border: 1px solid rgba(138, 75, 255, 0.3);
+  box-shadow: 0 0 10px rgba(138, 75, 255, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.glowing-border:hover {
+  box-shadow: 0 0 15px rgba(138, 75, 255, 0.4);
 }
