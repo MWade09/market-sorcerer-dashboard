@@ -5,25 +5,25 @@
 
 @layer base {
   :root {
-    --background: 280 5% 5%;
+    --background: 262 83% 18%; /* Deep purple for background */
     --foreground: 210 40% 98%;
 
-    --card: 280 5% 8%;
+    --card: 280 5% 5%; /* Deep black for cards/boxes */
     --card-foreground: 210 40% 98%;
 
-    --popover: 280 5% 8%;
+    --popover: 280 5% 5%; /* Deep black for popovers */
     --popover-foreground: 210 40% 98%;
 
-    --primary: 262 83% 68%;
+    --primary: 262 83% 68%; /* Bright purple */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 280 5% 12%;
+    --secondary: 280 5% 5%; /* Deep black for secondary elements */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 280 5% 15%;
+    --muted: 280 5% 5%; /* Deep black for muted areas */
     --muted-foreground: 220 8% 70%;
 
-    --accent: 262 83% 18%;
+    --accent: 262 83% 18%; /* Deep purple for accents */
     --accent-foreground: 262 83% 68%;
 
     --destructive: 0 84% 65%;
@@ -33,11 +33,11 @@
     --input: 280 5% 15%;
     --ring: 262 83% 68%;
 
-    --sidebar-background: 280 5% 8%;
+    --sidebar-background: 280 5% 5%; /* Deep black for sidebar */
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 262 83% 68%;
     --sidebar-primary-foreground: 280 5% 5%;
-    --sidebar-accent: 280 5% 15%;
+    --sidebar-accent: 280 5% 5%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 280 5% 15%;
     --sidebar-ring: 262 83% 68%;

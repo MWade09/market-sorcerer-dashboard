@@ -57,6 +57,7 @@
 .card {
   padding: 2em;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #0d0d0d; /* Deep black for cards */
 }
 
 .card:hover {
@@ -82,7 +83,7 @@
 
 /* Enhanced visual elements */
 .gradient-background {
-  background: linear-gradient(135deg, rgba(20, 20, 30, 0.8) 0%, rgba(15, 15, 25, 0.8) 100%);
+  background: linear-gradient(135deg, rgba(50, 20, 100, 0.9) 0%, rgba(30, 10, 60, 0.9) 100%);
 }
 
 .glowing-border {
@@ -95,7 +96,7 @@
   box-shadow: 0 0 15px rgba(150, 120, 255, 0.4);
 }
 
-/* New button hover effects */
+/* Button hover effects */
 .hover-glow-white {
   transition: all 0.3s ease;
 }
@@ -112,4 +113,16 @@
 .hover-glow-purple:hover {
   box-shadow: 0 0 15px rgba(150, 120, 255, 0.5);
   transform: scale(1.02);
+}
+
+/* Ensure card components have deep black background */
+.content-card {
+  background-color: #0d0d0d;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(150, 120, 255, 0.2);
+}
+
+/* Purple background for main sections */
+.app-background {
+  background-color: #341264;
 }
