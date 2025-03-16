@@ -20,7 +20,7 @@ const ProgressWithIndicator = React.forwardRef<HTMLDivElement, ProgressWithIndic
         aria-valuemin={0}
         aria-valuemax={max}
         aria-valuenow={value}
-        className={cn("relative h-4 w-full overflow-hidden rounded-full bg-muted", className)}
+        className={cn("relative h-4 w-full overflow-hidden rounded-full bg-muted transition-all duration-300 hover:shadow-glow", className)}
         {...props}
       >
         <div

@@ -22,7 +22,7 @@ export const MetricCard = ({
   const isNegative = change && change < 0;
 
   return (
-    <Card>
+    <Card className="transition-all duration-300 hover:shadow-glow">
       <CardContent className="p-6">
         <div className="flex flex-col space-y-1.5">
           <p className="text-sm font-medium text-muted-foreground">{label}</p>

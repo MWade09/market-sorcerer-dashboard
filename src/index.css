@@ -116,15 +116,15 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-background/80 backdrop-blur-sm border rounded-lg shadow-soft;
+    @apply bg-background/80 backdrop-blur-sm border rounded-lg shadow-soft transition-shadow duration-300 hover:shadow-glow;
   }
   
   .glass-panel-accent {
-    @apply bg-accent/80 backdrop-blur-sm border rounded-lg shadow-soft;
+    @apply bg-accent/80 backdrop-blur-sm border rounded-lg shadow-soft transition-shadow duration-300 hover:shadow-glow;
   }
 
   .content-panel {
-    @apply p-4 rounded-lg border bg-card animate-fade-in;
+    @apply p-4 rounded-lg border bg-card animate-fade-in transition-shadow duration-300 hover:shadow-glow;
   }
 
   .heading-label {
@@ -149,6 +149,39 @@
   
   .grid-layout {
     @apply grid gap-4;
+  }
+
+  /* Hover effects for common interactive elements */
+  .card, 
+  .button, 
+  .input,
+  .select,
+  .toggle,
+  .toggle-group,
+  .dropdown-item,
+  .accordion-item,
+  .calendar-day,
+  .tab,
+  .dialog-content,
+  .drawer-content,
+  .menu-item {
+    @apply transition-shadow duration-300;
+  }
+
+  .card:hover,
+  .button:hover,
+  .input:focus,
+  .select:focus,
+  .toggle:hover,
+  .toggle-group:hover,
+  .dropdown-item:hover,
+  .accordion-item:hover,
+  .calendar-day:hover,
+  .tab:hover,
+  .dialog-content:hover,
+  .drawer-content:hover, 
+  .menu-item:hover {
+    @apply shadow-glow;
   }
 }
 
