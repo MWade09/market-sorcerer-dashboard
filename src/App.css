@@ -20,10 +20,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em rgba(150, 120, 255, 0.8));
+  filter: drop-shadow(0 0 2em #646cffaa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em rgba(150, 120, 255, 0.8));
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 @keyframes logo-spin {
@@ -35,19 +35,6 @@
   }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { 
-    box-shadow: 0 0 10px rgba(150, 120, 255, 0.5);
-  }
-  50% { 
-    box-shadow: 0 0 20px rgba(150, 120, 255, 0.8);
-  }
-}
-
-.pulse-effect {
-  animation: pulse-glow 2s infinite ease-in-out;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -56,13 +43,6 @@
 
 .card {
   padding: 2em;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: #0d0d0d; /* Deep black for cards */
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.08);
 }
 
 .read-the-docs {
@@ -79,50 +59,4 @@
   body {
     font-size: 14px;
   }
-}
-
-/* Enhanced visual elements */
-.gradient-background {
-  background: linear-gradient(135deg, rgba(50, 20, 100, 0.9) 0%, rgba(30, 10, 60, 0.9) 100%);
-}
-
-.glowing-border {
-  border: 1px solid rgba(150, 120, 255, 0.3);
-  box-shadow: 0 0 10px rgba(150, 120, 255, 0.2);
-  transition: box-shadow 0.3s ease;
-}
-
-.glowing-border:hover {
-  box-shadow: 0 0 15px rgba(150, 120, 255, 0.4);
-}
-
-/* Button hover effects */
-.hover-glow-white {
-  transition: all 0.3s ease;
-}
-
-.hover-glow-white:hover {
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-  transform: scale(1.02);
-}
-
-.hover-glow-purple {
-  transition: all 0.3s ease;
-}
-
-.hover-glow-purple:hover {
-  box-shadow: 0 0 15px rgba(150, 120, 255, 0.5);
-  transform: scale(1.02);
-}
-
-/* Ensure card components have deep black background */
-.content-card {
-  background-color: #0d0d0d;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(150, 120, 255, 0.2);
-}
-
-/* Purple background for main sections */
-.app-background {
-  background-color: #341264;
 }

@@ -7,7 +7,7 @@ export interface ExchangeCredentials {
   testMode: boolean;
 }
 
-export type SupportedExchange = 'binance' | 'coinbase' | 'kraken' | 'alpaca';
+export type SupportedExchange = 'binance' | 'coinbase' | 'kraken';
 
 class ExchangeService {
   private credentials: Map<SupportedExchange, ExchangeCredentials> = new Map();
@@ -82,9 +82,6 @@ class ExchangeService {
           break;
         case 'kraken':
           result = await this.testKrakenConnection(credentials);
-          break;
-        case 'alpaca':
-          result = await this.testAlpacaConnection(credentials);
           break;
         default:
           throw new Error(`Unsupported exchange: ${exchange}`);
@@ -163,23 +160,6 @@ class ExchangeService {
     }
   }
 
-  private async testAlpacaConnection(credentials: ExchangeCredentials): Promise<boolean> {
-    try {
-      // In a real implementation, you would use the Alpaca API client
-      console.log('Testing Alpaca connection with credentials:', credentials.apiKey);
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // In production code, you would make a real API call here
-      
-      return true;
-    } catch (error) {
-      console.error('Alpaca connection test failed:', error);
-      return false;
-    }
-  }
-
   async getAccountBalance(exchange?: SupportedExchange): Promise<Record<string, number>> {
     const targetExchange = exchange || this.getActiveExchange();
     if (!targetExchange) {
@@ -200,8 +180,6 @@ class ExchangeService {
           return await this.getCoinbaseBalance(credentials);
         case 'kraken':
           return await this.getKrakenBalance(credentials);
-        case 'alpaca':
-          return await this.getAlpacaBalance(credentials);
         default:
           throw new Error(`Unsupported exchange: ${targetExchange}`);
       }
@@ -248,18 +226,6 @@ class ExchangeService {
       'XBT': 0.4, // Kraken uses XBT for Bitcoin
       'ETH': 3.5,
       'USDT': 7500
-    };
-  }
-
-  private async getAlpacaBalance(credentials: ExchangeCredentials): Promise<Record<string, number>> {
-    // In a real implementation, you would use the Alpaca API
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Simulate API response
-    return {
-      'BTC': 0.25,
-      'ETH': 3.8,
-      'USD': 12000
     };
   }
 }

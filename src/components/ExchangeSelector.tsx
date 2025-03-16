@@ -208,9 +208,7 @@ const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges: initialE
     return (
       <div className="w-8 h-8 bg-accent flex items-center justify-center rounded-md">
         <span className="text-xl font-bold">
-          {exchange === 'binance' ? 'B' : 
-           exchange === 'coinbase' ? 'C' : 
-           exchange === 'kraken' ? 'K' : 'A'}
+          {exchange === 'binance' ? 'B' : exchange === 'coinbase' ? 'C' : 'K'}
         </span>
       </div>
     );
@@ -264,17 +262,6 @@ const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges: initialE
                   <div className="flex items-center gap-2">
                     {renderExchangeIcon('kraken')}
                     <span>Kraken</span>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </button>
-                
-                <button 
-                  className="flex items-center justify-between p-3 border rounded-md hover:bg-accent transition-colors"
-                  onClick={() => setSelectedExchange('alpaca')}
-                >
-                  <div className="flex items-center gap-2">
-                    {renderExchangeIcon('alpaca')}
-                    <span>Alpaca</span>
                   </div>
                   <ChevronRight className="h-5 w-5 text-muted-foreground" />
                 </button>
