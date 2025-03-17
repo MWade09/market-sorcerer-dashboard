@@ -47,7 +47,7 @@
 }
 
 .card:hover {
-  box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.5);
 }
 
 .read-the-docs {
@@ -60,7 +60,7 @@
 }
 
 .interactive-element:hover {
-  box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.5);
 }
 
 /* Mobile specific styles */
