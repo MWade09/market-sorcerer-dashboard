@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ProgressWithIndicator } from '@/components/ui/progress-with-indicator';
+import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 
 interface PerformanceMetricsProps {
@@ -55,22 +55,18 @@ const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({ metrics }) => {
               )}
             </div>
             
-            <div className="text-base font-medium truncate">
+            <div className="text-base font-medium">
               {metric.value}
             </div>
             
             {/* Progress bar visualizations for certain metrics */}
             {(metric.label.includes('Win Rate') || metric.label.includes('Max Drawdown')) && (
               <div className="mt-2">
-                <ProgressWithIndicator 
+                <Progress 
                   value={
                     metric.label.includes('Win Rate')
-                      ? typeof metric.value === 'string' 
-                        ? parseFloat(metric.value.replace('%', ''))
-                        : metric.value
-                      : typeof metric.value === 'string'
-                        ? parseFloat(metric.value.replace('%', ''))
-                        : metric.value
+                      ? parseFloat(metric.value.toString()) 
+                      : parseFloat(metric.value.toString().replace('%', ''))
                   } 
                   max={
                     metric.label.includes('Win Rate') ? 100 : 20

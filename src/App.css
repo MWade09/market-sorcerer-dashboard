@@ -1,16 +1,8 @@
-
 #root {
-  max-width: 100%;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem;
   text-align: center;
-}
-
-@media (min-width: 768px) {
-  #root {
-    padding: 2rem;
-    max-width: 1280px;
-  }
 }
 
 .logo {
@@ -43,34 +35,8 @@
 
 .card {
   padding: 2em;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.5);
 }
 
 .read-the-docs {
   color: #888;
-}
-
-/* Interactive elements hover effect */
-.interactive-element {
-  transition: all 0.3s ease;
-}
-
-.interactive-element:hover {
-  box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.5);
-}
-
-/* Mobile specific styles */
-@media (max-width: 767px) {
-  .card {
-    padding: 1em;
-  }
-  
-  /* Adjust font sizes for better mobile readability */
-  body {
-    font-size: 14px;
-  }
 }

@@ -125,9 +125,7 @@ export default {
 			boxShadow: {
 				'soft': '0 2px 10px rgba(0, 0, 0, 0.05)',
 				'medium': '0 4px 20px rgba(0, 0, 0, 0.08)',
-				'glass': '0 8px 32px rgba(31, 38, 135, 0.07)',
-				'glow': '0 0 10px 1px rgba(255, 255, 255, 0.3)',
-				'glow-purple': '0 0 10px 1px rgba(139, 92, 246, 0.5)'
+				'glass': '0 8px 32px rgba(31, 38, 135, 0.07)'
 			},
 			backdropBlur: {
 				'xs': '2px',

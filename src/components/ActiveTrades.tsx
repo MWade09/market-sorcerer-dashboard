@@ -13,13 +13,12 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
-import { activeTrades } from '@/utils/mockData';
 
 interface ActiveTradesProps {
-  positions?: TradePosition[];
+  positions: TradePosition[];
 }
 
-const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions = activeTrades }) => {
+const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions }) => {
   const [selectedPosition, setSelectedPosition] = React.useState<TradePosition | null>(null);
 
   const formatCurrency = (value: number) => {
@@ -39,14 +38,6 @@ const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions = activeTrades })
     toast.success(`Position closed: ${position.symbol}`, {
       description: `${position.type.toUpperCase()} position closed at ${formatCurrency(position.currentPrice)}`
     });
-  };
-
-  const handleEditPosition = (position: TradePosition) => {
-    // This would typically open an edit form, but for now just show a notification
-    toast.info(`Editing position: ${position.symbol}`, {
-      description: "Position editing feature coming soon"
-    });
-    setSelectedPosition(null);
   };
 
   return (
@@ -172,10 +163,7 @@ const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions = activeTrades })
               </div>
 
               <div className="flex justify-between gap-2 mt-4">
-                <Button 
-                  variant="outline"
-                  onClick={() => handleEditPosition(selectedPosition)}
-                >
+                <Button variant="outline" onClick={() => setSelectedPosition(null)}>
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Position
                 </Button>
