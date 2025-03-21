@@ -1,5 +1,5 @@
 
-export type OrderStatus = 'pending' | 'pickup-pending' | 'pickup-in-progress' | 'pickup-completed' | 'delivery-pending' | 'delivery-in-progress' | 'delivered';
+export type OrderStatus = 'pending' | 'pickup-pending' | 'pickup-in-progress' | 'pickup-completed' | 'delivery-pending' | 'delivery-in-progress' | 'delivered' | 'in-transit';
 
 export interface OrderItem {
   id: string;

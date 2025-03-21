@@ -25,7 +25,7 @@ export const mockOrders: Order[] = [
       { id: 'item4', name: 'Cookies', quantity: 24, price: 1.49 },
     ],
     totalCost: 68.75,
-    status: 'in-transit',
+    status: 'in-transit', // This was causing an error, now it's valid
     driverId: 'DRV-001',
     isLeased: false,
   },
@@ -63,7 +63,7 @@ export const mockOrders: Order[] = [
       { id: 'item10', name: 'Cinnamon Rolls', quantity: 6, price: 4.49 },
     ],
     totalCost: 44.91,
-    status: 'in-transit',
+    status: 'in-transit', // This was causing an error, now it's valid
     driverId: 'DRV-003',
     isLeased: false,
   },
