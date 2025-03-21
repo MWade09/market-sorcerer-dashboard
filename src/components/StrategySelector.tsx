@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   ChevronRight, 
@@ -367,5 +368,20 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
                 <Button onClick={() => {
                   setSelectedStrategy(null);
                   toast({
+                    title: "Strategy updated",
+                    description: "Your strategy settings have been updated successfully.",
+                    variant: "default"
+                  });
+                }}>
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
 
-
+export default StrategySelector;
