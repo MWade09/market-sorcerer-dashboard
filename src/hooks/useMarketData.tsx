@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Cryptocurrency, ChartData, TimeFrame } from '@/lib/types';
 import { cryptocurrencies, bitcoinChartData, ethereumChartData } from '@/utils/mockData';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 
 export const useMarketData = () => {
   const [marketData, setMarketData] = useState<Cryptocurrency[]>([]);
@@ -25,8 +25,10 @@ export const useMarketData = () => {
         console.error('Error fetching market data:', err);
         setError('Failed to fetch market data');
         setLoading(false);
-        toast.error('Failed to fetch market data', {
-          description: 'Please check your connection and try again'
+        toast({
+          title: "Error",
+          description: 'Failed to fetch market data. Please check your connection and try again',
+          variant: "destructive"
         });
       }
     };
@@ -74,7 +76,10 @@ export const useMarketData = () => {
     })));
     
     setLoading(false);
-    toast.success('Market data refreshed');
+    toast({
+      title: "Success",
+      description: "Market data refreshed"
+    });
   };
 
   return { marketData, loading, error, getChartData, refreshData };

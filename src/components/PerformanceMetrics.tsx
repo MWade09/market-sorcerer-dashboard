@@ -75,9 +75,6 @@ const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({ metrics }) => {
                     "h-1.5",
                     metric.label.includes('Win Rate') ? "bg-muted" : "bg-red-100"
                   )}
-                  indicatorClassName={
-                    metric.label.includes('Win Rate') ? "bg-green-500" : "bg-red-500"
-                  }
                 />
               </div>
             )}

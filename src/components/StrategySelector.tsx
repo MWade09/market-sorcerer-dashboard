@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   ChevronRight, 
@@ -20,7 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 
 interface StrategyCardProps {
   strategy: TradingStrategy;

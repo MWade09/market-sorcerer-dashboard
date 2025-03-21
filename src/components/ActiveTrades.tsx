@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from '@/components/ui/sonner';
+import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 interface ActiveTradesProps {

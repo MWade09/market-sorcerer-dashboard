@@ -104,8 +104,8 @@ const OrderDashboard = () => {
                   <TableCell className="text-right">${order.totalCost.toFixed(2)}</TableCell>
                   <TableCell>
                     <Badge variant={
-                      order.status === "delivered" ? "success" :
-                      order.status === "in-transit" ? "warning" : "default"
+                      order.status === "delivered" ? "default" :
+                      order.status === "in-transit" ? "secondary" : "outline"
                     }>
                       {order.status}
                     </Badge>

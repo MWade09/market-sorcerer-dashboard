@@ -1,6 +1,6 @@
-
 import { Order } from '@/types/orders';
 import { Driver } from '@/types/drivers';
+import { Cryptocurrency, ChartData } from '@/lib/types';
 
 export const mockOrders: Order[] = [
   {
@@ -106,3 +106,46 @@ export const mockDrivers: Driver[] = [
     isAvailable: true,
   },
 ];
+
+export const cryptocurrencies: Cryptocurrency[] = [
+  {
+    id: 'bitcoin',
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    price: 63245.87,
+    volume24h: 28413965432,
+    marketCap: 1237896543210,
+    change24h: 2.34,
+    sparkline: []
+  },
+  {
+    id: 'ethereum',
+    name: 'Ethereum',
+    symbol: 'ETH',
+    price: 3245.42,
+    volume24h: 15723896541,
+    marketCap: 389756123450,
+    change24h: -1.24,
+    sparkline: []
+  },
+  {
+    id: 'binancecoin',
+    name: 'Binance Coin',
+    symbol: 'BNB',
+    price: 578.32,
+    volume24h: 2134567890,
+    marketCap: 89012345678,
+    change24h: 0.75,
+    sparkline: []
+  }
+];
+
+export const bitcoinChartData: ChartData[] = Array.from({ length: 24 }, (_, i) => ({
+  time: new Date(Date.now() - (24 - i) * 3600 * 1000).toISOString(),
+  value: 60000 + Math.random() * 5000
+}));
+
+export const ethereumChartData: ChartData[] = Array.from({ length: 24 }, (_, i) => ({
+  time: new Date(Date.now() - (24 - i) * 3600 * 1000).toISOString(),
+  value: 3000 + Math.random() * 500
+}));
