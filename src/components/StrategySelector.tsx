@@ -20,7 +20,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/sonner';
 
 interface StrategyCardProps {
   strategy: TradingStrategy;
@@ -148,10 +148,8 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
       const updatedStrategy = { ...strategy, isActive: true };
       setActiveStrategies([...activeStrategies, updatedStrategy]);
       setInactiveStrategies(inactiveStrategies.filter(s => s.id !== id));
-      toast({
-        title: "Strategy activated",
-        description: `Strategy "${strategy.name}" is now running and will execute trades based on its rules.`,
-        variant: "default"
+      toast.success(`Strategy "${strategy.name}" activated`, {
+        description: "The strategy is now running and will execute trades based on its rules."
       });
     }
   };
@@ -162,10 +160,8 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
       const updatedStrategy = { ...strategy, isActive: false };
       setInactiveStrategies([...inactiveStrategies, updatedStrategy]);
       setActiveStrategies(activeStrategies.filter(s => s.id !== id));
-      toast({
-        title: "Strategy deactivated",
-        description: `Strategy "${strategy.name}" has been paused and will not execute any new trades.`,
-        variant: "default"
+      toast.info(`Strategy "${strategy.name}" deactivated`, {
+        description: "The strategy has been paused and will not execute any new trades."
       });
     }
   };
@@ -367,13 +363,9 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
                 </Button>
                 <Button onClick={() => {
                   setSelectedStrategy(null);
-                  toast({
-                    title: "Strategy updated",
-                    description: "Your strategy settings have been updated successfully.",
-                    variant: "default"
-                  });
+                  toast.success("Strategy settings updated");
                 }}>
-                  Save Changes
+                  Save Settings
                 </Button>
               </div>
             </div>

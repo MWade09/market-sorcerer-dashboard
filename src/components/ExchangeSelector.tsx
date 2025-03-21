@@ -18,7 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 interface ExchangeSelectorProps {
@@ -38,19 +38,13 @@ const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges }) => {
     if (!selectedExchange) return;
     
     if (!configValues.apiKey || !configValues.apiSecret) {
-      toast({
-        title: "Error",
-        description: "API key and secret are required",
-        variant: "destructive"
-      });
+      toast.error('API key and secret are required');
       return;
     }
 
     // In a real app, this would send the API credentials to the backend
-    toast({
-      title: "Success",
-      description: `Connected to ${selectedExchange}. API credentials have been securely stored`,
-      variant: "default"
+    toast.success(`Connected to ${selectedExchange}`, {
+      description: 'API credentials have been securely stored',
     });
     
     setOpenDialog(false);

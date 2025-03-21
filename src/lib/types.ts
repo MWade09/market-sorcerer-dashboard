@@ -1,3 +1,4 @@
+
 export type Exchange = 'binance' | 'coinbase' | 'kraken';
 
 export type TimeFrame = '1m' | '5m' | '15m' | '1h' | '4h' | '1d' | '1w';
@@ -20,7 +21,6 @@ export type TradingStrategy = {
 };
 
 export type Cryptocurrency = {
-  id: string;
   symbol: string;
   name: string;
   price: number;
@@ -28,7 +28,6 @@ export type Cryptocurrency = {
   volume24h: number;
   marketCap: number;
   image?: string;
-  sparkline?: any[];
 };
 
 export type ChartData = {

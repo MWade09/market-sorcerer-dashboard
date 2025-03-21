@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Clock, TrendingUp, TrendingDown, X, BarChart3, Edit } from 'lucide-react';
 import { TradePosition } from '@/lib/types';
@@ -10,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 interface ActiveTradesProps {
@@ -34,10 +35,8 @@ const ActiveTrades: React.FC<ActiveTradesProps> = ({ positions }) => {
   };
 
   const handleClosePosition = (position: TradePosition) => {
-    toast({
-      title: "Position closed",
-      description: `${position.type.toUpperCase()} position closed at ${formatCurrency(position.currentPrice)}`,
-      variant: "default"
+    toast.success(`Position closed: ${position.symbol}`, {
+      description: `${position.type.toUpperCase()} position closed at ${formatCurrency(position.currentPrice)}`
     });
   };
 
