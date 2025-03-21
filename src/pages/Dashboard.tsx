@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OrderDashboard from './OrderDashboard';
 import DriverDashboard from './DriverDashboard';
 import { useToast } from "@/hooks/use-toast";
-import { TruckIcon, UsersIcon, HomeIcon } from 'lucide-react';
+import { TruckIcon, UsersIcon, HomeIcon, MapIcon } from 'lucide-react';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("orders");
@@ -32,6 +32,14 @@ const Dashboard = () => {
             <Link to="/drivers" className="text-sm font-medium flex items-center gap-1 hover:text-primary">
               <UsersIcon className="h-4 w-4" />
               Drivers
+            </Link>
+            <Link to="/dispatch" className="text-sm font-medium flex items-center gap-1 hover:text-primary">
+              <MapIcon className="h-4 w-4" />
+              Dispatch
+            </Link>
+            <Link to="/driver-portal" className="text-sm font-medium flex items-center gap-1 hover:text-primary">
+              <UsersIcon className="h-4 w-4" />
+              Driver Portal
             </Link>
           </nav>
         </div>
