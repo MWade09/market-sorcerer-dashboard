@@ -1,3 +1,4 @@
+
 import { Order } from '@/types/orders';
 import { Driver } from '@/types/drivers';
 import { Cryptocurrency, ChartData } from '@/lib/types';
@@ -140,12 +141,28 @@ export const cryptocurrencies: Cryptocurrency[] = [
   }
 ];
 
-export const bitcoinChartData: ChartData[] = Array.from({ length: 24 }, (_, i) => ({
-  time: new Date(Date.now() - (24 - i) * 3600 * 1000).toISOString(),
-  value: 60000 + Math.random() * 5000
-}));
+export const bitcoinChartData: ChartData[] = Array.from({ length: 24 }, (_, i) => {
+  const baseTime = Date.now() - (24 - i) * 3600 * 1000;
+  const basePrice = 60000 + Math.random() * 5000;
+  return {
+    time: baseTime,
+    open: basePrice,
+    high: basePrice * (1 + Math.random() * 0.02),
+    low: basePrice * (1 - Math.random() * 0.02),
+    close: basePrice * (1 + (Math.random() - 0.5) * 0.02),
+    volume: 1000000 + Math.random() * 500000
+  };
+});
 
-export const ethereumChartData: ChartData[] = Array.from({ length: 24 }, (_, i) => ({
-  time: new Date(Date.now() - (24 - i) * 3600 * 1000).toISOString(),
-  value: 3000 + Math.random() * 500
-}));
+export const ethereumChartData: ChartData[] = Array.from({ length: 24 }, (_, i) => {
+  const baseTime = Date.now() - (24 - i) * 3600 * 1000;
+  const basePrice = 3000 + Math.random() * 500;
+  return {
+    time: baseTime,
+    open: basePrice,
+    high: basePrice * (1 + Math.random() * 0.02),
+    low: basePrice * (1 - Math.random() * 0.02),
+    close: basePrice * (1 + (Math.random() - 0.5) * 0.02),
+    volume: 500000 + Math.random() * 200000
+  };
+});

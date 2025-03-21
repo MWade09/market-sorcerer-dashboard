@@ -147,8 +147,10 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
       const updatedStrategy = { ...strategy, isActive: true };
       setActiveStrategies([...activeStrategies, updatedStrategy]);
       setInactiveStrategies(inactiveStrategies.filter(s => s.id !== id));
-      toast.success(`Strategy "${strategy.name}" activated`, {
-        description: "The strategy is now running and will execute trades based on its rules."
+      toast({
+        title: "Strategy activated",
+        description: `Strategy "${strategy.name}" is now running and will execute trades based on its rules.`,
+        variant: "default"
       });
     }
   };
@@ -159,8 +161,10 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
       const updatedStrategy = { ...strategy, isActive: false };
       setInactiveStrategies([...inactiveStrategies, updatedStrategy]);
       setActiveStrategies(activeStrategies.filter(s => s.id !== id));
-      toast.info(`Strategy "${strategy.name}" deactivated`, {
-        description: "The strategy has been paused and will not execute any new trades."
+      toast({
+        title: "Strategy deactivated",
+        description: `Strategy "${strategy.name}" has been paused and will not execute any new trades.`,
+        variant: "default"
       });
     }
   };
@@ -362,17 +366,6 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ strategies }) => {
                 </Button>
                 <Button onClick={() => {
                   setSelectedStrategy(null);
-                  toast.success("Strategy settings updated");
-                }}>
-                  Save Settings
-                </Button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
+                  toast({
 
-export default StrategySelector;
+

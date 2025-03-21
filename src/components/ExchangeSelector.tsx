@@ -38,13 +38,19 @@ const ExchangeSelector: React.FC<ExchangeSelectorProps> = ({ exchanges }) => {
     if (!selectedExchange) return;
     
     if (!configValues.apiKey || !configValues.apiSecret) {
-      toast.error('API key and secret are required');
+      toast({
+        title: "Error",
+        description: "API key and secret are required",
+        variant: "destructive"
+      });
       return;
     }
 
     // In a real app, this would send the API credentials to the backend
-    toast.success(`Connected to ${selectedExchange}`, {
-      description: 'API credentials have been securely stored',
+    toast({
+      title: "Success",
+      description: `Connected to ${selectedExchange}. API credentials have been securely stored`,
+      variant: "default"
     });
     
     setOpenDialog(false);
